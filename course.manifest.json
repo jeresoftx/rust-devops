@@ -14,7 +14,7 @@
       "number": 1,
       "title": "Docker",
       "slug": "docker",
-      "status": "planned",
+      "status": "draft",
       "milestone": "01. Docker",
       "document": "docs/01-docker.md",
       "module": "src/docker.rs",
