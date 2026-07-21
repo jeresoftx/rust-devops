@@ -28,7 +28,7 @@
       "number": 2,
       "title": "Kubernetes",
       "slug": "kubernetes",
-      "status": "draft",
+      "status": "implemented",
       "milestone": "02. Kubernetes",
       "document": "docs/02-kubernetes.md",
       "module": "src/kubernetes.rs",

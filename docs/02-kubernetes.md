@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -118,6 +118,6 @@ Una carga de trabajo explicada en este capítulo debe declarar:
 
 ## Fuera de alcance en este issue
 
-Este issue no implementa todavía el modelo Rust, no agrega ejemplos completos y
-no entrega ejercicios. Esos pasos viven en los issues siguientes del milestone
-`02. Kubernetes`.
+Este issue no agrega todavía ejemplos completos, diagramas finales ni
+ejercicios. Esos pasos viven en los issues siguientes del milestone
+`02. Kubernetes`. El modelo Rust mínimo ya vive en `src/kubernetes.rs`.
