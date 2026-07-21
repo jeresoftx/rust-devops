@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -116,9 +116,9 @@ Una estrategia de observabilidad explicada aquí debe declarar:
 
 ## Fuera de alcance en este issue
 
-Este issue no agrega todavía modelo Rust, ejemplo completo, diagrama final,
-ejercicios ni benchmark. Esos pasos viven en los issues siguientes del
-milestone `06. Observabilidad`.
+Este issue no agrega todavía ejemplo completo, diagrama final, ejercicios ni
+benchmark. Esos pasos viven en los issues siguientes del milestone
+`06. Observabilidad`. El modelo Rust mínimo ya vive en `src/observability.rs`.
 
 ## Entregables del capítulo
 
