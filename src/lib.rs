@@ -5,6 +5,7 @@
 //! agregarán módulos por concepto operativo conforme a RFC-0001 §14.
 
 pub mod docker;
+pub mod kubernetes;
 
 /// Nombre público del curso dentro de Jeresoft Academy.
 pub const COURSE_NAME: &str = "DevOps";
@@ -58,7 +59,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 2,
         title: "Kubernetes",
-        status: ChapterStatus::Planned,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 3,
@@ -122,9 +123,10 @@ mod tests {
         assert!(
             chapters
                 .iter()
-                .skip(1)
+                .skip(2)
                 .all(|chapter| chapter.status == ChapterStatus::Planned)
         );
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
+        assert_eq!(chapters[1].status, ChapterStatus::Implemented);
     }
 }
