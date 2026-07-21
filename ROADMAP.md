@@ -46,7 +46,7 @@ progresión esperada es:
 | 01 | Docker | benchmarked |
 | 02 | Kubernetes | benchmarked |
 | 03 | Pipelines de CI/CD | benchmarked |
-| 04 | Estrategias de despliegue | draft |
+| 04 | Estrategias de despliegue | implemented |
 | 05 | Gestión de releases | planned |
 | 06 | Observabilidad | planned |
 | 07 | Stack Grafana | planned |

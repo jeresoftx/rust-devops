@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -119,9 +119,10 @@ Una estrategia de despliegue explicada aquí debe declarar:
 
 ## Fuera de alcance en este issue
 
-Este issue no agrega todavía el modelo Rust, ejemplos completos, diagrama final
-ni ejercicios. Esos pasos viven en los issues siguientes del milestone
-`04. Estrategias de despliegue`.
+Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
+Esos pasos viven en los issues siguientes del milestone
+`04. Estrategias de despliegue`. El modelo Rust mínimo ya vive en
+`src/deployment_strategies.rs`.
 
 ## Entregables del capítulo
 
