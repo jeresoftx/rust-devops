@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -156,18 +156,75 @@ Los doctests muestran cómo construir una estrategia canary mínima y evaluarla.
 
 ## Benchmarks
 
-Pendiente del issue de mediciones del milestone `04. Estrategias de despliegue`.
-La medición debe distinguir el costo del modelo Rust de métricas reales:
-duración del rollout, tiempo de detección, tiempo de rollback, porcentaje de
-tráfico expuesto y tasa de error durante la promoción.
+El benchmark educativo vive en
+[`benches/deployment_strategies_baseline.rs`](../benches/deployment_strategies_baseline.rs):
+
+```bash
+cargo bench --bench deployment_strategies_baseline
+```
+
+Ese benchmark mide el costo de evaluar tres estrategias educativas: canary
+guardado, rolling riesgoso y big bang sin guardrails. No mide balanceadores,
+orquestadores ni rollouts reales.
+
+En producción, las métricas relevantes son:
+
+- duración del rollout;
+- tiempo hasta detectar degradación;
+- tiempo de rollback;
+- porcentaje de tráfico expuesto;
+- usuarios afectados;
+- tasa de error durante promoción;
+- latencia comparada entre versión vieja y nueva;
+- señales de negocio durante la exposición.
+
+La regla práctica: usa el benchmark para verificar que el modelo siga barato;
+usa observabilidad real para decidir si una estrategia protege producción.
 
 ## Ejercicios
 
-Pendiente del issue de ejercicios del milestone `04. Estrategias de despliegue`.
+### Nivel 1: canary sano
+
+Construye una estrategia canary para `billing-api-1.0.0` con 5% de exposición
+inicial, 50% máximo, señales de error y latencia, rollback y compatibilidad de
+versiones.
+
+Objetivo: explicar por qué la decisión puede ser `Continue`.
+
+### Nivel 2: rolling riesgoso
+
+Construye un rolling update con 75% de exposición inicial, una sola señal,
+sin rollback y sin compatibilidad temporal.
+
+Objetivo: identificar por qué la decisión debe pausar antes de ampliar.
+
+### Nivel 3: endurecer despliegue
+
+Parte de un big bang al 100% sin señales ni rollback. Luego rediseña el cambio
+como canary o feature flag con señales y salida clara.
+
+Objetivo: comparar hallazgos antes/después y explicar cómo cambia el blast
+radius.
+
+### Nivel 4: caso real guiado
+
+Diseña una estrategia de despliegue para un servicio real o plausible de
+Softrek/Jeresoft Academy. Declara versión, población expuesta, señales,
+criterios de avance, pausa, rollback y compatibilidad temporal.
+
+Objetivo: tomar una decisión de release antes de escribir manifiestos o flags.
 
 ## Soluciones
 
-Pendiente del issue de ejercicios del milestone `04. Estrategias de despliegue`.
+- Nivel 1:
+  [`examples/soluciones/deployment_strategies_nivel_1.rs`](../examples/soluciones/deployment_strategies_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/deployment_strategies_nivel_2.rs`](../examples/soluciones/deployment_strategies_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/deployment_strategies_nivel_3.rs`](../examples/soluciones/deployment_strategies_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al servicio elegido
+por el estudiante.
 
 ## Referencias
 

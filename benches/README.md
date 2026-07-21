@@ -33,3 +33,13 @@ reales de CI/CD.
 Para operación real, el capítulo documenta métricas más relevantes: duración
 total, tiempo en cola, cache hit rate, etapa más lenta, tasa de fallos por
 etapa, tiempo de recuperación y frecuencia de reintentos manuales.
+
+## Estrategias de despliegue
+
+`deployment_strategies_baseline.rs` mide el costo de evaluar estrategias
+educativas de exposición, señales y rollback. No mide balanceadores,
+orquestadores, feature flag services ni rollouts reales.
+
+Para operación real, el capítulo documenta métricas más relevantes: duración
+del rollout, tiempo de detección, tiempo de rollback, porcentaje de tráfico
+expuesto, tasa de error durante la promoción y número de usuarios afectados.

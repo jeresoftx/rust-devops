@@ -47,6 +47,18 @@ path = "examples/soluciones/cicd_nivel_2.rs"
 name = "cicd_nivel_3"
 path = "examples/soluciones/cicd_nivel_3.rs"
 
+[[example]]
+name = "deployment_strategies_nivel_1"
+path = "examples/soluciones/deployment_strategies_nivel_1.rs"
+
+[[example]]
+name = "deployment_strategies_nivel_2"
+path = "examples/soluciones/deployment_strategies_nivel_2.rs"
+
+[[example]]
+name = "deployment_strategies_nivel_3"
+path = "examples/soluciones/deployment_strategies_nivel_3.rs"
+
 [[bench]]
 name = "docker_baseline"
 path = "benches/docker_baseline.rs"
@@ -60,4 +72,9 @@ harness = false
 [[bench]]
 name = "cicd_baseline"
 path = "benches/cicd_baseline.rs"
+harness = false
+
+[[bench]]
+name = "deployment_strategies_baseline"
+path = "benches/deployment_strategies_baseline.rs"
 harness = false
