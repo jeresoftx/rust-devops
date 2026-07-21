@@ -1,0 +1,12 @@
+[package]
+name = "rust-devops"
+version = "0.1.0"
+edition = "2024"
+description = "Curso de DevOps de Jeresoft Academy: CI/CD, contenedores, Kubernetes, observabilidad y operación."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/jeresoftx/rust-devops"
+readme = "README.md"
+keywords = ["devops", "rust", "academy", "observability", "kubernetes"]
+categories = ["development-tools"]
+
+[dependencies]

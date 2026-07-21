@@ -1,0 +1,15 @@
+flowchart LR
+    Cloud["rust-cloud\nplataforma"] --> DevOps["rust-devops\noperación"]
+    Architecture["rust-software-architecture\ndiseño del sistema"] --> DevOps
+    DevOps --> AI["rust-ai-engineering\nsistemas evaluables"]
+    DevOps --> Travel["rust-travel\ncapstone operable"]
+
+    Docker["01 Docker"] --> Kubernetes["02 Kubernetes"]
+    Kubernetes --> CICD["03 CI/CD"]
+    CICD --> Deploy["04 Despliegues"]
+    Deploy --> Releases["05 Releases"]
+    Releases --> Observability["06 Observabilidad"]
+    Observability --> Grafana["07 Stack Grafana"]
+    Grafana --> Reliability["08 SLOs y alertas"]
+    Reliability --> Retention["09 Retención"]
+    Retention --> Regulated["10 Dominios regulados"]
