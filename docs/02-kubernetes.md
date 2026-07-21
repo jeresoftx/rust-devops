@@ -1,123 +1,183 @@
 # Kubernetes
 
 > **Curso:** DevOps · **Capítulo:** 02 · **Prerequisitos:** Docker
-> **Código:** `src/kubernetes.rs` · **Video:** pendiente
+> **Código:** [`src/kubernetes.rs`](../src/kubernetes.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
 `implemented`
 
-## Concepto
+## Introducción
 
-Kubernetes se estudia aquí como un **sistema de reconciliación de estado
-deseado**. El usuario declara cómo quiere que exista una aplicación: cuántas
-réplicas, qué imagen ejecutan, qué puertos exponen, qué configuración reciben y
-qué señales indican salud. El cluster observa la realidad y ejecuta acciones
-para acercarla a esa declaración.
+Kubernetes aparece después de Docker porque no reemplaza el contrato de
+ejecución: lo orquesta. Docker nos dio una imagen y un contenedor; Kubernetes
+pregunta cómo mantener muchos contenedores vivos, conectados, configurados y
+actualizados dentro de un cluster.
 
-La unidad mental no es el archivo YAML. La unidad mental es este ciclo:
+Este capítulo enseña Kubernetes como sistema de reconciliación de estado
+deseado. El lector debe entender imágenes, contenedores, puertos, variables de
+entorno y procesos antes de entrar aquí.
 
-1. declarar intención;
-2. observar estado real;
-3. comparar diferencias;
-4. reconciliar;
-5. repetir mientras el sistema viva.
+## Motivación
 
-Kubernetes es útil porque convierte operación repetible en control loops. Es
-peligroso cuando se adopta antes de necesitar esa complejidad.
+Un contenedor aislado no responde todas las preguntas de producción. Si el
+proceso muere, alguien debe reiniciarlo. Si hay tres réplicas y una cae,
+alguien debe crear otra. Si se despliega una versión nueva, alguien debe
+reemplazar instancias sin cortar todo el tráfico. Si una réplica arrancó pero
+todavía no está lista, alguien debe evitar mandarle requests.
 
-## Problema
+Ese "alguien" no debería ser una persona recordando comandos a las dos de la
+mañana. Kubernetes convierte esas tareas repetibles en loops de control que
+observan el cluster y actúan para acercarlo al estado deseado.
 
-Un contenedor individual resuelve reproducibilidad de ejecución, pero no
-resuelve por sí solo preguntas de producción:
+## Teoría
 
-- ¿qué pasa si el proceso muere?
-- ¿cómo se reemplaza una réplica sin cortar todo el tráfico?
-- ¿cómo se descubre un servicio desde otro?
-- ¿cómo se aplica configuración sin reconstruir la imagen?
-- ¿cómo se separa estado deseado de estado observado?
-- ¿cómo se sabe si una instancia está lista para recibir tráfico?
+### Historia
 
-Kubernetes aparece cuando administrar manualmente esas respuestas se vuelve más
-costoso y riesgoso que adoptar un orquestador.
+Kubernetes fue anunciado por Google en 2014 y se inspiró en años de operación
+interna de sistemas de contenedores como Borg. Su valor no está en haber
+inventado los contenedores, sino en popularizar un modelo declarativo para
+operarlos: el equipo describe intención y el sistema intenta mantenerla.
 
-## Alternativas
+La idea importante es vieja y poderosa: control loops. Un termostato compara
+temperatura deseada contra temperatura real; Kubernetes compara estado deseado
+contra estado observado.
 
-### Docker Compose
+### Fundamentos
 
-Excelente para desarrollo local, demos y stacks pequeños. Permite declarar
-servicios relacionados sin operar un cluster completo.
+El ciclo base es:
 
-Ventaja: simple, cercano al flujo de desarrollo.  
-Costo: no modela toda la operación de producción: scheduling, reconciliación,
-rollouts, tolerancia a fallas y políticas de cluster.
+1. declarar intención en objetos;
+2. persistir esa intención en el control plane;
+3. observar el estado real del cluster;
+4. detectar diferencia entre intención y realidad;
+5. ejecutar acciones de reconciliación;
+6. repetir.
 
-### Scripts de despliegue
+Los objetos canónicos del capítulo son:
 
-Un equipo puede automatizar `ssh`, `docker pull`, `docker stop` y `docker run`
-con scripts propios.
+- **Pod:** unidad mínima de ejecución.
+- **Deployment:** declara réplicas y estrategia de actualización.
+- **Service:** da una dirección estable para llegar a pods cambiantes.
+- **ConfigMap y Secret:** separan configuración de imagen.
+- **Readiness y liveness probes:** distinguen "arrancó" de "puede recibir
+  tráfico" y "quedó roto".
+- **Requests y limits:** declaran necesidades y límites de recursos.
 
-Ventaja: control directo y poca infraestructura inicial.  
-Costo: la lógica de reconciliación, rollback y recuperación queda repartida en
-scripts difíciles de auditar.
+### Casos de uso
 
-### PaaS administrado
+Kubernetes tiene sentido cuando un equipo necesita:
 
-Plataformas como Heroku, Fly.io o servicios administrados equivalentes ocultan
-parte de la orquestación.
+- operar varias réplicas de servicios;
+- tolerar fallas de nodos o procesos;
+- automatizar rollouts y rollbacks;
+- descubrir servicios dentro de una red de cluster;
+- aplicar configuración por ambiente;
+- observar salud y capacidad de workloads;
+- estandarizar operación entre equipos.
 
-Ventaja: menor carga operativa para equipos pequeños.  
-Costo: menos control del modelo de ejecución y mayor dependencia del proveedor.
+### Ventajas y limitaciones
 
-### Kubernetes
+Kubernetes ofrece una abstracción uniforme para operar workloads. Su modelo
+declarativo permite automatizar trabajo que sería frágil en scripts manuales.
 
-Introduce objetos declarativos, control plane, scheduler, controllers,
-services, health checks y mecanismos de rollout.
+El costo es real: más conceptos, más piezas, más permisos, más superficie de
+falla y más responsabilidad operativa. Para un servicio pequeño, una plataforma
+PaaS o Docker Compose pueden ser mejores. Usar Kubernetes sin entenderlo no
+elimina complejidad; la esconde hasta que producción la cobra.
 
-Ventaja: modelo uniforme para operar aplicaciones distribuidas.  
-Costo: curva de aprendizaje, superficie operativa amplia y riesgo de usar una
-plataforma compleja para problemas simples.
+### Comparación con alternativas
 
-## Justificación
+Docker Compose es excelente para desarrollo local y stacks chicos. Scripts con
+SSH pueden ser suficientes al inicio, pero tienden a mezclar intención,
+procedimiento y estado. PaaS reduce carga operativa, aunque limita control.
 
-Este capítulo viene después de Docker porque Kubernetes no reemplaza el contrato
-de ejecución: lo orquesta. Si la imagen está mal diseñada, Kubernetes solo
-automatiza el problema con más maquinaria alrededor.
+Kubernetes se justifica cuando el costo de operar manualmente supera el costo
+de aprender y mantener el orquestador.
 
-La decisión pedagógica es enseñar Kubernetes desde el ciclo de reconciliación,
-no desde comandos. Los manifiestos son evidencia de una intención; el concepto
-duradero es el sistema que compara intención contra realidad y actúa.
+## Diagramas
 
-## Invariantes del capítulo
+El diagrama principal vive en
+[`diagrams/02-kubernetes.mmd`](../diagrams/02-kubernetes.mmd).
 
-Una carga de trabajo explicada en este capítulo debe declarar:
+```mermaid
+flowchart LR
+    Desired["Estado deseado"] --> Api["API server"]
+    Api --> Store["etcd"]
+    Controllers["Controllers"] --> Api
+    Controllers --> Diff["Diferencia"]
+    Diff --> Scheduler["Scheduler"]
+    Scheduler --> Nodes["Nodos"]
+    Nodes --> Observed["Estado observado"]
+    Observed --> Controllers
+```
 
-- **Imagen versionada:** no se despliega `latest` como contrato de producción.
-- **Réplicas explícitas:** el número deseado de instancias no queda implícito.
-- **Puertos claros:** los contenedores exponen puertos coherentes con el
-  servicio que los enruta.
-- **Readiness:** una réplica no recibe tráfico antes de estar lista.
-- **Liveness:** una réplica puede reiniciarse si queda en estado roto.
-- **Configuración externa:** ConfigMaps y Secrets no se hornean en la imagen.
-- **Límites de recursos:** CPU y memoria se declaran para evitar competencia
-  invisible dentro del cluster.
-- **Rollout reversible:** el cambio debe poder pausarse, observarse o revertirse.
+## Análisis de complejidad
 
-## Fronteras con otros cursos
+No hay complejidad asintótica útil para el estudiante en este capítulo. El
+costo relevante es operativo:
 
-- `rust-cloud` enseña infraestructura de plataforma: cómputo, redes, IAM,
-  almacenamiento y servicios gestionados.
-- `rust-devops` enseña la operación sobre esa plataforma: orquestación,
-  despliegues, señales y recuperación.
-- `rust-distributed-systems` profundiza en consenso, relojes, gossip y fallas
-  distribuidas. Kubernetes usa ideas distribuidas, pero este capítulo se queda
-  en el modelo operativo.
-- `rust-security` profundizará en hardening; aquí solo se cubren mínimos de
-  configuración segura.
+| Operación | Costo dominante | Qué lo afecta |
+|-----------|-----------------|---------------|
+| Reconciliación | latencia de observación y acción | tamaño del cluster, controllers, eventos pendientes |
+| Rollout | creación y readiness de réplicas | imagen, probes, capacidad disponible |
+| Scheduling | búsqueda de nodo válido | requests, límites, afinidad, taints, presión de recursos |
+| Diagnóstico | calidad de señales | eventos, logs, probes, métricas y cambios recientes |
 
-## Fuera de alcance en este issue
+El benchmark educativo de este curso medirá el costo del modelo Rust, no el
+control plane real. Para producción importan métricas del cluster y de rollout.
 
-Este issue no agrega todavía ejemplos completos, diagramas finales ni
-ejercicios. Esos pasos viven en los issues siguientes del milestone
-`02. Kubernetes`. El modelo Rust mínimo ya vive en `src/kubernetes.rs`.
+## Visualización interactiva (opcional)
+
+No aplica en este bloque. Una visualización futura puede mostrar réplicas
+deseadas contra observadas y cómo un reconciliador decide escalar o esperar
+readiness.
+
+## Implementación
+
+El código vive en [`src/kubernetes.rs`](../src/kubernetes.rs). El módulo
+representa:
+
+- `WorkloadSpec`: nombre, imagen, réplicas, puertos, probes y recursos;
+- `ServiceSpec`: ruta estable hacia un workload;
+- `ObservedWorkload`: estado observado del cluster;
+- `ApplicationSpec`: workload más servicio;
+- `reconcile`: comparación entre estado deseado y observado.
+
+La implementación no intenta copiar la API completa de Kubernetes. Ese sería un
+mal recurso educativo para este momento. El objetivo es hacer visible el ciclo
+mental de reconciliación.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- una aplicación sana con una réplica faltante;
+- una especificación insegura o incompleta: imagen `latest`, probes ausentes,
+  recursos ausentes, service apuntando a otro workload y puerto no declarado.
+
+Los doctests muestran cómo construir una aplicación mínima y obtener acciones
+de reconciliación.
+
+## Benchmarks
+
+Pendiente del issue de mediciones del milestone `02. Kubernetes`. La medición
+debe separar el costo del modelo educativo de las métricas reales: duración de
+rollout, tiempo a readiness, eventos de scheduling y capacidad disponible.
+
+## Ejercicios
+
+Pendiente del issue de ejercicios del milestone `02. Kubernetes`.
+
+## Soluciones
+
+Pendiente del issue de ejercicios del milestone `02. Kubernetes`.
+
+## Referencias
+
+- Kubernetes documentation: Concepts.
+- Kubernetes documentation: Workloads.
+- Kubernetes documentation: Services, Load Balancing, and Networking.
+- Kubernetes documentation: Configure Liveness, Readiness and Startup Probes.
+- Google SRE Workbook: prácticas de rollout, observabilidad y respuesta.
