@@ -46,7 +46,7 @@ progresión esperada es:
 | 01 | Docker | benchmarked |
 | 02 | Kubernetes | benchmarked |
 | 03 | Pipelines de CI/CD | benchmarked |
-| 04 | Estrategias de despliegue | implemented |
+| 04 | Estrategias de despliegue | benchmarked |
 | 05 | Gestión de releases | planned |
 | 06 | Observabilidad | planned |
 | 07 | Stack Grafana | planned |
@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Trabajar el milestone `04. Estrategias de despliegue` con el mismo flujo:
+Trabajar el milestone `05. Gestión de releases` con el mismo flujo:
 especificación conceptual, modelo Rust mínimo, capítulo/diagrama/ejemplos,
 ejercicios, soluciones y validación automatizada.
