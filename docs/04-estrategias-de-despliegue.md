@@ -1,133 +1,178 @@
-# Estrategias de despliegue
+# Estrategias de Despliegue
 
 > **Curso:** DevOps · **Capítulo:** 04 · **Prerequisitos:** Pipelines de CI/CD
-> **Código:** `src/deployment_strategies.rs` · **Video:** pendiente
+> **Código:** [`src/deployment_strategies.rs`](../src/deployment_strategies.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
 `implemented`
 
-## Concepto
+## Introducción
 
-Una estrategia de despliegue es una forma deliberada de **controlar exposición
-y reversibilidad** cuando un artefacto nuevo entra a un sistema vivo. No basta
-con copiar una versión al ambiente correcto: hay que decidir cuántos usuarios
-la verán, qué señales se observarán, cómo se detendrá el cambio y cómo se
-volverá a un estado sano si algo falla.
+Una estrategia de despliegue controla exposición y reversibilidad cuando una
+versión nueva entra a un sistema vivo. El objetivo no es hacer que el cambio
+llegue rápido; el objetivo es que llegue con una forma clara de observar,
+pausar, ampliar o revertir.
 
-La unidad mental del capítulo es:
+Este capítulo aparece después de CI/CD porque el pipeline puede construir un
+artefacto confiable, pero todavía falta decidir cómo ponerlo frente a usuarios.
 
-1. elegir el cambio que se va a liberar;
-2. decidir cuánto tráfico o qué población lo recibirá;
-3. observar señales durante la exposición;
-4. continuar, pausar, revertir o ampliar el despliegue;
-5. registrar la decisión y sus evidencias.
+## Motivación
 
-Una buena estrategia no elimina el riesgo. Lo vuelve visible, gradual y
-reversible.
+Un release puede pasar pruebas, compilar, producir imagen Docker y aun así
+fallar cuando toca tráfico real. Quizá la latencia sube solo con ciertos datos,
+una migración rompe compatibilidad temporal, una nueva ruta genera más errores
+o una dependencia externa responde diferente.
 
-## Problema
+La estrategia de despliegue limita cuánto daño puede hacer esa incertidumbre.
+Un deploy sano convierte riesgo absoluto en exposición gradual con señales.
 
-Un deploy no termina cuando el artefacto llega al servidor. Termina cuando el
-sistema nuevo funciona con usuarios reales, el anterior puede retirarse y
-existe una salida clara si algo sale mal.
+## Teoría
 
-El problema real aparece cuando todos los usuarios reciben el cambio al mismo
-tiempo, las señales llegan tarde o el equipo no tiene camino de regreso.
-Entonces el despliegue se vuelve apuesta: si sale bien, nadie aprende; si sale
-mal, producción paga el costo completo.
+### Historia
 
-Las estrategias de despliegue existen para reducir blast radius: limitar el
-impacto inicial mientras el equipo gana evidencia.
+Durante años, muchos equipos hicieron despliegues tipo big bang: ventana de
+mantenimiento, cambio grande, todos atentos y rollback manual si algo fallaba.
+Ese modelo sigue existiendo, pero los sistemas modernos suelen exigir cambios
+más frecuentes, menos interrupciones y recuperación más rápida.
 
-## Alternativas
+Prácticas como rolling updates, blue-green, canary releases y feature flags
+nacieron para separar publicar código, exponer tráfico y activar funcionalidad.
+El patrón común es reducir blast radius.
 
-### Big bang
+### Fundamentos
 
-Todo el tráfico cambia a la nueva versión en una sola acción.
+Toda estrategia debe responder:
 
-Ventaja: simple de entender y operar.
-Costo: máximo impacto si falla; rollback urgente y visible.
+- **Qué versión entra:** artefacto, tag, commit o release.
+- **Quién la ve:** porcentaje de tráfico, segmento, región o ambiente.
+- **Qué se observa:** errores, latencia, reinicios y métricas de negocio.
+- **Cuándo avanza:** criterios de promoción.
+- **Cuándo se pausa:** señales que requieren investigación.
+- **Cuándo revierte:** señales que hacen inaceptable continuar.
+- **Qué convive:** compatibilidad entre versión vieja y nueva.
 
-### Rolling update
+El capítulo compara cinco estrategias:
 
-Las instancias se reemplazan gradualmente.
+- **Big bang:** todo cambia al mismo tiempo.
+- **Rolling:** se reemplazan instancias gradualmente.
+- **Blue-green:** dos ambientes alternan tráfico.
+- **Canary:** una fracción pequeña recibe la versión nueva.
+- **Feature flags:** se despliega código sin activar toda la funcionalidad.
 
-Ventaja: no requiere duplicar todo el ambiente y reduce interrupciones.
-Costo: durante el rollout conviven versiones; exige compatibilidad temporal.
+### Casos de uso
 
-### Blue-green
+Rolling updates sirven cuando el servicio tolera convivencia de versiones y no
+se necesita duplicar ambientes. Blue-green funciona bien cuando el cambio de
+tráfico debe ser rápido y el costo de duplicar infraestructura es aceptable.
+Canary ayuda cuando se quiere observar tráfico real con bajo impacto. Feature
+flags son útiles para separar despliegue técnico de activación de producto.
 
-Dos ambientes completos existen en paralelo: uno atiende tráfico y el otro se
-prepara con la nueva versión.
+Big bang puede ser aceptable en sistemas pequeños o cambios de bajo riesgo,
+pero debe reconocerse como máximo blast radius.
 
-Ventaja: cambio rápido de tráfico y rollback claro.
-Costo: mayor costo de infraestructura y cuidado con datos compartidos.
+### Ventajas y limitaciones
 
-### Canary
+Las estrategias progresivas reducen impacto inicial y mejoran aprendizaje
+operativo. También obligan a tener señales de salud reales; sin métricas, un
+canary es solo una espera decorada.
 
-La nueva versión recibe una fracción pequeña de tráfico antes de ampliar
-exposición.
+El costo es complejidad: routing, compatibilidad temporal, flags pendientes,
+ambientes duplicados, criterios de promoción y disciplina de rollback. Una
+estrategia elegante sin ownership termina siendo teatro operacional.
 
-Ventaja: detecta problemas con usuarios reales y blast radius bajo.
-Costo: requiere routing, métricas confiables y criterios de avance.
+### Comparación con alternativas
 
-### Feature flags
+Un pipeline sin estrategia solo responde "¿el artefacto parece válido?". Una
+estrategia responde "¿cómo lo exponemos sin apostar todo?". Un orquestador como
+Kubernetes puede ejecutar rolling updates, pero no decide por sí solo si las
+señales significan continuar o revertir. Un feature flag puede proteger
+activación de producto, pero no reemplaza pruebas, artefactos trazables ni
+observabilidad.
 
-El código se despliega separado de la activación de la funcionalidad.
+## Diagramas
 
-Ventaja: permite liberar, activar y desactivar por segmento.
-Costo: agrega complejidad, deuda de flags y riesgo de combinaciones no probadas.
+El diagrama principal vive en
+[`diagrams/04-estrategias-de-despliegue.mmd`](../diagrams/04-estrategias-de-despliegue.mmd).
 
-## Justificación
+```mermaid
+flowchart LR
+    Users["Usuarios"] --> Router["Router / balanceador"]
+    Router --> Old["Versión actual"]
+    Router --> New["Versión nueva"]
+    New --> Signals["Señales"]
+    Signals --> Decision["Continuar, pausar o rollback"]
+    Decision --> Router
+```
 
-Este capítulo viene después de CI/CD porque un pipeline puede entregar un
-artefacto válido, pero no decide por sí solo cómo exponerlo a usuarios. La
-estrategia de despliegue es la capa donde se conecta automatización con riesgo
-operativo.
+## Análisis de complejidad
 
-La decisión pedagógica es enseñar estrategias como decisiones de exposición,
-señales y reversibilidad. La sintaxis de Kubernetes, flags o proveedores cloud
-puede cambiar; el criterio de cuánto riesgo aceptar en cada paso permanece.
+No hay complejidad asintótica relevante. El costo es operativo:
 
-## Invariantes del capítulo
+| Estrategia | Costo dominante | Riesgo principal |
+|------------|-----------------|------------------|
+| Big bang | coordinación y rollback | impacto total si falla |
+| Rolling | convivencia de versiones | incompatibilidad temporal |
+| Blue-green | infraestructura duplicada | datos compartidos y corte de tráfico |
+| Canary | observabilidad y routing | señales insuficientes |
+| Feature flags | gestión de flags | deuda de activaciones viejas |
 
-Una estrategia de despliegue explicada aquí debe declarar:
+La complejidad real aparece cuando los datos migran, los contratos cambian o
+las señales no distinguen bien entre ruido y degradación.
 
-- **Artefacto objetivo:** qué versión entra al sistema.
-- **Población expuesta:** porcentaje de tráfico, usuarios, región o ambiente.
-- **Señales de salud:** métricas, logs, errores y comportamiento esperado.
-- **Criterios de avance:** cuándo ampliar exposición.
-- **Criterios de pausa:** cuándo detener el rollout.
-- **Criterios de rollback:** cuándo volver atrás.
-- **Compatibilidad temporal:** qué pasa cuando conviven versiones.
-- **Responsable de decisión:** humano, pipeline, controller o regla automatizada.
-- **Registro de evidencia:** qué se observó antes de continuar.
+## Visualización interactiva (opcional)
 
-## Fronteras con otros cursos
+No aplica en este bloque. Una visualización futura puede permitir mover un
+slider de exposición y observar cómo cambian riesgo, decisión y hallazgos para
+cada estrategia.
 
-- `rust-cicd` no existe como curso separado: este capítulo usa el modelo de
-  Pipelines de CI/CD del propio `rust-devops`.
-- `rust-cloud` enseña la plataforma donde ocurren los despliegues.
-- `rust-distributed-systems` profundiza en compatibilidad, consistencia y
-  fallas parciales.
-- `rust-security` profundiza en permisos, cambios sensibles y exposición por
-  segmento.
-- `rust-observability` no es repo separado aquí; observabilidad aparecerá como
-  capítulo posterior para medir señales en producción.
+## Implementación
 
-## Fuera de alcance en este issue
+El código vive en
+[`src/deployment_strategies.rs`](../src/deployment_strategies.rs). El módulo
+representa:
 
-Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
-Esos pasos viven en los issues siguientes del milestone
-`04. Estrategias de despliegue`. El modelo Rust mínimo ya vive en
-`src/deployment_strategies.rs`.
+- `DeploymentStrategyKind`: big bang, rolling, blue-green, canary y feature
+  flag;
+- `DeploymentStrategy`: release, exposición, señales, rollback y compatibilidad;
+- `HealthSignal`: señales mínimas para decidir;
+- `DeploymentFinding`: riesgos detectados;
+- `evaluate_deployment`: decisión `Continue`, `Pause` o `RollBack`.
 
-## Entregables del capítulo
+La implementación no opera infraestructura real. Eso es deliberado: primero se
+razona la estrategia, después se expresa en Kubernetes, un balanceador, una
+plataforma cloud o un sistema de flags.
 
-- Capítulo completo conforme a RFC-0001 §14.
-- Diagrama de tráfico para cada estrategia principal.
-- Modelo Rust mínimo de riesgo, exposición y reversibilidad.
-- Ejemplos progresivos y pruebas.
-- Benchmarks o métricas operativas justificadas.
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- canary sano con señales, rollback y compatibilidad;
+- rolling update con exposición inicial excesiva y guardrails faltantes;
+- big bang con exposición total y sin señales suficientes.
+
+Los doctests muestran cómo construir una estrategia canary mínima y evaluarla.
+
+## Benchmarks
+
+Pendiente del issue de mediciones del milestone `04. Estrategias de despliegue`.
+La medición debe distinguir el costo del modelo Rust de métricas reales:
+duración del rollout, tiempo de detección, tiempo de rollback, porcentaje de
+tráfico expuesto y tasa de error durante la promoción.
+
+## Ejercicios
+
+Pendiente del issue de ejercicios del milestone `04. Estrategias de despliegue`.
+
+## Soluciones
+
+Pendiente del issue de ejercicios del milestone `04. Estrategias de despliegue`.
+
+## Referencias
+
+- Martin Fowler: Blue-Green Deployment.
+- Martin Fowler: Canary Release.
+- LaunchDarkly: feature flags and progressive delivery.
+- Kubernetes documentation: Deployments and rolling updates.
+- Google SRE Workbook: release engineering and rollback practices.
