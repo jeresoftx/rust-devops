@@ -47,7 +47,7 @@ progresión esperada es:
 | 02 | Kubernetes | benchmarked |
 | 03 | Pipelines de CI/CD | benchmarked |
 | 04 | Estrategias de despliegue | benchmarked |
-| 05 | Gestión de releases | implemented |
+| 05 | Gestión de releases | benchmarked |
 | 06 | Observabilidad | planned |
 | 07 | Stack Grafana | planned |
 | 08 | Alertas, SLOs y SLIs | planned |
@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Trabajar el milestone `05. Gestión de releases` con el mismo flujo:
-especificación conceptual, modelo Rust mínimo, capítulo/diagrama/ejemplos,
-ejercicios, soluciones y validación automatizada.
+Trabajar el milestone `06. Observabilidad` con el mismo flujo: especificación
+conceptual, modelo Rust mínimo, capítulo/diagrama/ejemplos, ejercicios,
+soluciones y validación automatizada.

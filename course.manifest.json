@@ -70,7 +70,7 @@
       "number": 5,
       "title": "Gestión de releases",
       "slug": "gestion-de-releases",
-      "status": "implemented",
+      "status": "benchmarked",
       "milestone": "05. Gestión de releases",
       "document": "docs/05-gestion-de-releases.md",
       "module": "src/release_management.rs",

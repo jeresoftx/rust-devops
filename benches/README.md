@@ -43,3 +43,14 @@ orquestadores, feature flag services ni rollouts reales.
 Para operación real, el capítulo documenta métricas más relevantes: duración
 del rollout, tiempo de detección, tiempo de rollback, porcentaje de tráfico
 expuesto, tasa de error durante la promoción y número de usuarios afectados.
+
+## Gestión de releases
+
+`release_management_baseline.rs` mide el costo de evaluar planes educativos de
+versión, artefactos, changelog, notas, rollback y comunicación. No mide GitHub
+Releases, generación real de changelog, firmas ni publicación de paquetes.
+
+Para operación real, el capítulo documenta métricas más relevantes: tiempo de
+release, artefactos trazables, releases con rollback documentado, cambios
+incompatibles detectados antes de publicar y tiempo para identificar la última
+versión segura.
