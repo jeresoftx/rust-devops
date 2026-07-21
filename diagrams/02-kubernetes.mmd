@@ -1,0 +1,15 @@
+flowchart LR
+    Desired["Estado deseado\nDeployment, Service, Config"] --> Api["API server"]
+    Api --> Store["etcd\nfuente de estado"]
+    Controllers["Controllers"] --> Api
+    Controllers --> Compare["Comparar\ndeseado vs observado"]
+    Compare --> Actions["Acciones de reconciliación"]
+    Actions --> Scheduler["Scheduler"]
+    Scheduler --> Nodes["Nodos"]
+    Nodes --> Pods["Pods"]
+    Pods --> Observed["Estado observado"]
+    Observed --> Controllers
+
+    Service["Service\nIP estable"] --> Pods
+    Probes["Readiness/Liveness"] --> Pods
+    Resources["Requests/Limits"] --> Scheduler
