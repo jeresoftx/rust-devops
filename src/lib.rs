@@ -8,6 +8,7 @@ pub mod cicd;
 pub mod deployment_strategies;
 pub mod docker;
 pub mod kubernetes;
+pub mod observability;
 pub mod release_management;
 
 /// Nombre público del curso dentro de Jeresoft Academy.
@@ -82,7 +83,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 6,
         title: "Observabilidad",
-        status: ChapterStatus::Draft,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 7,
@@ -134,6 +135,6 @@ mod tests {
         assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[3].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[4].status, ChapterStatus::Benchmarked);
-        assert_eq!(chapters[5].status, ChapterStatus::Draft);
+        assert_eq!(chapters[5].status, ChapterStatus::Implemented);
     }
 }
