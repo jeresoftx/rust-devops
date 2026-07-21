@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -237,26 +237,77 @@ breaking change mal versionado.
 
 ## Benchmarks
 
-Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+El benchmark educativo vive en
+[`benches/release_management_baseline.rs`](../benches/release_management_baseline.rs):
 
-Las mediciones educativas deberán evaluar el costo de revisar releases
-representativos: uno sano, uno con versión incorrecta y uno sin trazabilidad ni
-comunicación.
+```bash
+cargo bench --bench release_management_baseline
+```
+
+Ese benchmark mide el costo de evaluar tres planes de release educativos: uno
+minor sano, uno con breaking change mal versionado y uno sin trazabilidad ni
+comunicación. No mide GitHub Releases, generación real de changelog, firmas,
+registros de artefactos ni publicación de paquetes.
+
+En producción, las métricas relevantes son:
+
+- tiempo desde merge hasta release publicado;
+- porcentaje de releases con rollback documentado;
+- porcentaje de artefactos trazables por digest, commit o firma;
+- cambios incompatibles detectados antes de publicar;
+- incidentes causados por comunicación incompleta;
+- tiempo para identificar la última versión segura;
+- tiempo para generar y revisar notas de release.
+
+La regla práctica: usa el benchmark para verificar que el modelo educativo siga
+barato; usa trazabilidad real para demostrar que una versión puede explicarse y
+revertirse.
 
 ## Ejercicios
 
-Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+### Nivel 1: release minor compatible
 
-Los ejercicios deberán cubrir al menos:
+Construye un release de `booking-api` de `1.0.0` a `1.1.0` con una feature
+compatible, artefacto trazable, notas, changelog, rollback y canal de
+comunicación.
 
-- construir un release minor compatible;
-- detectar una versión semántica incorrecta;
-- endurecer un release sin trazabilidad;
-- diseñar un caso real con notas, changelog, artefactos y rollback.
+Objetivo: explicar por qué el release queda listo para publicarse.
+
+### Nivel 2: breaking change mal versionado
+
+Construye un release de `booking-api` de `1.0.0` a `1.1.0` que incluya un
+breaking change.
+
+Objetivo: detectar por qué el incremento esperado debe ser major y no minor.
+
+### Nivel 3: endurecer release incompleto
+
+Parte de un release sin avance de versión, con artefacto no trazable y sin
+notas, changelog, rollback ni comunicación. Después rediseña el plan como un
+patch release completo.
+
+Objetivo: comparar hallazgos antes/después y explicar qué evidencia faltaba.
+
+### Nivel 4: caso real guiado
+
+Diseña un release para un servicio real o plausible de Softrek/Jeresoft
+Academy. Declara versión previa, versión nueva, cambios, artefactos, notas,
+changelog, rollback, canal y criterio de aprobación.
+
+Objetivo: tomar una decisión de publicación que otra persona pueda auditar sin
+preguntarte por contexto perdido.
 
 ## Soluciones
 
-Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+- Nivel 1:
+  [`examples/soluciones/release_management_nivel_1.rs`](../examples/soluciones/release_management_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/release_management_nivel_2.rs`](../examples/soluciones/release_management_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/release_management_nivel_3.rs`](../examples/soluciones/release_management_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al servicio elegido
+por el estudiante.
 
 ## Referencias
 
