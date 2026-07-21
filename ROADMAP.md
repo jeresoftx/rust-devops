@@ -48,7 +48,7 @@ progresión esperada es:
 | 03 | Pipelines de CI/CD | benchmarked |
 | 04 | Estrategias de despliegue | benchmarked |
 | 05 | Gestión de releases | benchmarked |
-| 06 | Observabilidad | planned |
+| 06 | Observabilidad | draft |
 | 07 | Stack Grafana | planned |
 | 08 | Alertas, SLOs y SLIs | planned |
 | 09 | Retención de telemetría | planned |
