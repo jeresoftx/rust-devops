@@ -17,11 +17,12 @@ fn roadmap_starts_with_operational_foundations() {
     assert!(
         chapters
             .iter()
-            .skip(4)
+            .skip(5)
             .all(|chapter| chapter.status == ChapterStatus::Planned)
     );
     assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
     assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
     assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);
     assert_eq!(chapters[3].status, ChapterStatus::Benchmarked);
+    assert_eq!(chapters[4].status, ChapterStatus::Draft);
 }
