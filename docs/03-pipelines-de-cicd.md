@@ -1,136 +1,192 @@
 # Pipelines de CI/CD
 
 > **Curso:** DevOps · **Capítulo:** 03 · **Prerequisitos:** Git, Docker
-> **Código:** `src/cicd.rs` · **Video:** pendiente
+> **Código:** [`src/cicd.rs`](../src/cicd.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
 `implemented`
 
-## Concepto
+## Introducción
 
-Un pipeline de CI/CD es una **cadena de evidencias antes de cambiar un sistema
-vivo**. Cada etapa responde una pregunta concreta: si el código tiene formato,
-si compila, si pasa pruebas, si produce un artefacto reproducible, si cumple
-controles mínimos y si puede promoverse a otro ambiente.
+Un pipeline de CI/CD es una cadena de evidencias antes de cambiar un sistema
+vivo. Recibe un evento, ejecuta verificaciones, produce o valida un artefacto y
+decide si el cambio puede avanzar hacia otro ambiente.
 
-El pipeline no existe para "hacer deploy automático" como fin en sí mismo.
-Existe para reducir incertidumbre entre un cambio en Git y una modificación en
-producción.
+Este capítulo no enseña primero YAML. Enseña criterio: qué debe comprobarse,
+qué debe bloquear, qué debe quedar registrado y cuándo una automatización se
+vuelve ruido.
 
-La unidad mental no es el archivo YAML de GitHub Actions, GitLab CI o Jenkins.
-La unidad mental es este ciclo:
+## Motivación
 
-1. recibir un cambio;
-2. construir evidencia;
-3. detener el cambio si falta una señal obligatoria;
-4. producir un artefacto trazable;
-5. promover solo cuando el riesgo aceptado sea explícito;
-6. registrar qué se cambió, cuándo y con qué resultado.
+Un release manual parece barato mientras todo sale bien. El costo aparece
+cuando alguien olvida correr una prueba, compila desde una rama equivocada,
+despliega un artefacto distinto al revisado o no puede explicar qué commit está
+vivo en producción.
 
-## Problema
+CI/CD reduce ese riesgo al convertir pasos críticos en señales repetibles. Pero
+un pipeline mal diseñado también puede ser peligroso: si es lento, el equipo lo
+evade; si prueba lo incorrecto, da confianza falsa; si despliega sin gates,
+automatiza el accidente.
 
-Sin automatización, cada release depende de memoria humana: recordar comandos,
-correr pruebas, construir artefactos, copiar versiones y avisar al equipo. Esa
-memoria falla justo cuando hay presión.
+La pregunta central no es "¿cómo hago deploy automático?". La pregunta es:
+"¿qué evidencia necesito antes de permitir que este cambio avance?".
 
-Pero automatizar sin criterio también crea problemas:
+## Teoría
 
-- pipelines lentos que nadie respeta;
-- checks verdes que no prueban lo importante;
-- etapas duplicadas que solo dan sensación de seguridad;
-- secretos mal manejados;
-- artefactos imposibles de rastrear;
-- despliegues que avanzan sin gates adecuados;
-- ambientes que no se parecen entre sí.
+### Historia
 
-El problema real es diseñar una cadena mínima y suficiente de señales para
-cambiar software con trazabilidad.
+La integración continua nació como una práctica para integrar cambios con
+frecuencia y detectar errores temprano. La entrega continua extendió la idea:
+si cada cambio puede producir un artefacto confiable, el equipo puede decidir
+cuándo liberarlo con menos drama.
 
-## Alternativas
+La evolución de herramientas llevó de servidores dedicados como Jenkins a
+plataformas integradas con Git, runners efímeros, matrices de build, ambientes
+protegidos y flujos GitOps. La herramienta importa, pero el principio dura más:
+cada cambio debe producir evidencia antes de tocar producción.
 
-### Release manual
+### Fundamentos
 
-Una persona ejecuta comandos localmente o desde un servidor compartido.
+Un pipeline útil declara:
 
-Ventaja: simple al inicio y fácil de entender.
-Costo: baja trazabilidad, alto riesgo de omisiones y dependencia directa de una
-persona.
+- **Trigger:** qué evento lo activa: pull request, push, tag o promoción manual.
+- **Stages:** etapas ordenadas o paralelizables: formato, lint, pruebas, build,
+  seguridad, empaquetado y despliegue.
+- **Gates:** condiciones obligatorias que bloquean avance.
+- **Artifact:** unidad trazable que será promovida: binario, imagen, paquete o
+  manifiesto.
+- **Environment:** destino del cambio: development, staging o production.
+- **Rollback:** salida documentada si el cambio degrada el sistema.
 
-### Scripts de automatización
+El pipeline sano separa tres decisiones:
 
-El equipo crea scripts para compilar, probar, empaquetar o desplegar.
+1. **Verificar:** construir evidencia sobre el cambio.
+2. **Empaquetar:** producir un artefacto reproducible.
+3. **Promover:** mover ese artefacto entre ambientes con gates claros.
 
-Ventaja: mejora repetibilidad sin adoptar una plataforma completa.
-Costo: si no se integran con revisión, logs, permisos y artefactos, los scripts
-siguen siendo operación manual con otro nombre.
+### Casos de uso
 
-### Plataforma de CI/CD
+CI/CD tiene sentido cuando un equipo necesita:
 
-GitHub Actions, GitLab CI, Jenkins, Buildkite, CircleCI u otra plataforma
-ejecutan workflows por evento.
+- validar pull requests con señales consistentes;
+- evitar builds hechos a mano desde laptops;
+- publicar imágenes Docker con tag y commit trazable;
+- promover el mismo artefacto entre staging y producción;
+- bloquear releases si falla seguridad o pruebas críticas;
+- auditar quién aprobó un cambio y cuándo;
+- medir duración y confiabilidad del proceso de entrega.
 
-Ventaja: historial, permisos, paralelismo, integración con pull requests y
-ambientes.
-Costo: dependencia de la plataforma, sintaxis específica y riesgo de pipelines
-opacos o demasiado acoplados.
+### Ventajas y limitaciones
 
-### GitOps
+La ventaja principal es reducir variabilidad humana. Un pipeline también crea
+historial, logs, permisos, evidencia y puntos claros de intervención.
 
-El estado deseado de despliegue vive en Git y un reconciliador aplica cambios al
-ambiente.
+El costo es diseño y mantenimiento. Un pipeline demasiado grande se vuelve
+lento. Uno demasiado pequeño no protege. Uno demasiado acoplado a una
+plataforma se vuelve difícil de migrar. Uno sin propiedad termina roto y nadie
+lo siente como parte del producto.
 
-Ventaja: trazabilidad fuerte y reconciliación declarativa.
-Costo: agrega piezas operativas y requiere disciplina en separación de
-artefacto, configuración y ambiente.
+### Comparación con alternativas
 
-## Justificación
+Un release manual puede bastar para un prototipo, pero no escala con equipo ni
+riesgo. Scripts locales ayudan a repetir comandos, aunque no necesariamente
+aportan revisión, permisos, historial o ambiente controlado. Una plataforma
+PaaS puede ocultar buena parte del pipeline, pero el equipo sigue necesitando
+entender qué evidencia exige antes de publicar.
 
-Este capítulo viene después de Docker y Kubernetes porque CI/CD conecta ambos:
-construye artefactos reproducibles y decide cuándo promoverlos hacia un entorno
-orquestado.
+CI/CD se justifica cuando el costo de olvidar pasos, perder trazabilidad o
+romper ambientes supera el costo de mantener automatización.
 
-La decisión pedagógica es enseñar pipelines como diseño de evidencia, no como
-recetas de YAML. Las herramientas cambian; el criterio de qué verificar, cuándo
-bloquear y qué registrar dura más.
+## Diagramas
 
-## Invariantes del capítulo
+El diagrama principal vive en
+[`diagrams/03-pipelines-de-cicd.mmd`](../diagrams/03-pipelines-de-cicd.mmd).
 
-Un pipeline explicado en este capítulo debe declarar:
+```mermaid
+flowchart LR
+    Change["Cambio en Git"] --> Trigger["Trigger"]
+    Trigger --> Format["Formato"]
+    Format --> Lint["Lint"]
+    Lint --> Tests["Pruebas"]
+    Tests --> Build["Build"]
+    Build --> Security["Seguridad"]
+    Security --> Package["Artefacto"]
+    Package --> Staging["Staging"]
+    Staging --> Approval["Aprobación"]
+    Approval --> Production["Producción"]
+    Production --> Signals["Señales y rollback"]
+```
 
-- **Evento de entrada:** push, pull request, tag, release manual o promoción.
-- **Etapas explícitas:** formato, lint, pruebas, build, seguridad, artefacto y
-  despliegue si aplica.
-- **Gates obligatorios:** condiciones que bloquean promoción.
-- **Artefacto trazable:** versión, commit y metadatos suficientes para auditar.
-- **Separación de ambientes:** desarrollo, staging y producción no se mezclan.
-- **Secretos fuera del código:** credenciales gestionadas por la plataforma.
-- **Observabilidad del pipeline:** duración, fallas, etapa fallida y actor.
-- **Rollback o recuperación:** el cambio debe tener una salida razonable.
+## Análisis de complejidad
 
-## Fronteras con otros cursos
+No hay complejidad asintótica importante para el estudiante. El costo relevante
+es operativo:
 
-- `rust-software-architecture` decide límites, módulos y contratos internos.
-- `rust-cloud` enseña infraestructura base: cuentas, redes, IAM, cómputo y
-  servicios administrados.
-- `rust-devops` enseña cómo verificar, empaquetar, promover, observar y reparar
-  cambios.
-- `rust-security` profundiza en threat modeling, supply chain y gestión de
-  secretos; aquí se cubren controles mínimos para no enseñar malas prácticas.
-- `rust-distributed-systems` profundiza en fallas distribuidas; aquí se mira el
-  pipeline como sistema operativo de entrega.
+| Operación | Costo dominante | Qué lo afecta |
+|-----------|-----------------|---------------|
+| Validación de PR | duración de checks críticos | tamaño del proyecto, cache, paralelismo, dependencias |
+| Build de artefacto | cómputo y transferencia | cache de capas, compilación incremental, registry |
+| Promoción | latencia de ambiente y gates | aprobaciones, readiness, migraciones, capacidad |
+| Diagnóstico | claridad de logs y eventos | naming de etapas, artifacts, retención, ownership |
 
-## Fuera de alcance en este issue
+Un pipeline rápido pero ciego es peligroso. Un pipeline completo pero lento
+también. La disciplina está en construir la menor cadena de evidencia que
+proteja el cambio real.
 
-Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
-Esos pasos viven en los issues siguientes del milestone
-`03. Pipelines de CI/CD`. El modelo Rust mínimo ya vive en `src/cicd.rs`.
+## Visualización interactiva (opcional)
 
-## Entregables del capítulo
+No aplica en este bloque. Una visualización futura puede permitir activar
+etapas, fallar gates y observar si el pipeline permite promoción a development,
+staging o production.
 
-- Capítulo completo conforme a RFC-0001 §14.
-- Diagrama del flujo commit-artefacto-release.
-- Modelo Rust mínimo de etapas, gates y resultados.
-- Ejemplos progresivos y pruebas.
-- Métricas de duración o justificación de no aplicabilidad.
+## Implementación
+
+El código vive en [`src/cicd.rs`](../src/cicd.rs). El módulo representa:
+
+- `PipelineTrigger`: evento de entrada;
+- `Environment`: ambiente destino;
+- `StageKind`: tipo conceptual de etapa;
+- `PipelineStage`: gate obligatorio u opcional con resultado;
+- `BuildArtifact`: artefacto trazable por versión y commit;
+- `PipelineSpec`: pipeline observado;
+- `evaluate_pipeline`: evaluación de promoción.
+
+La implementación no ejecuta comandos. Eso es deliberado: primero se enseña el
+contrato mental del pipeline; después cada plataforma lo expresa con su sintaxis.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- un pipeline de pull request con gates mínimos;
+- un pipeline de staging bloqueado por prueba fallida;
+- un pipeline de producción incompleto: sin seguridad, paquete, aprobación,
+  deploy, artefacto trazable ni rollback.
+
+Los doctests muestran cómo construir una ruta mínima de validación para
+development.
+
+## Benchmarks
+
+Pendiente del issue de mediciones del milestone `03. Pipelines de CI/CD`. La
+medición debe distinguir entre el costo del modelo Rust y las métricas reales
+de operación: duración del pipeline, tiempo de cola, cache hit rate, etapa más
+lenta, tasa de fallos y tiempo de recuperación.
+
+## Ejercicios
+
+Pendiente del issue de ejercicios del milestone `03. Pipelines de CI/CD`.
+
+## Soluciones
+
+Pendiente del issue de ejercicios del milestone `03. Pipelines de CI/CD`.
+
+## Referencias
+
+- Continuous Integration, Martin Fowler.
+- Continuous Delivery, Jez Humble y David Farley.
+- GitHub Actions documentation: workflow syntax and environments.
+- GitLab CI/CD documentation: pipelines and environments.
+- Google SRE Workbook: release engineering.

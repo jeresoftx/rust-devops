@@ -1,0 +1,17 @@
+flowchart LR
+    Change["Cambio en Git"] --> Trigger["Trigger"]
+    Trigger --> Format["Formato"]
+    Format --> Lint["Lint"]
+    Lint --> Tests["Pruebas"]
+    Tests --> Build["Build"]
+    Build --> Security["Seguridad"]
+    Security --> Package["Artefacto trazable"]
+    Package --> Staging["Staging"]
+    Staging --> Approval["Aprobación"]
+    Approval --> Production["Producción"]
+    Production --> Signals["Señales"]
+    Signals --> Rollback["Rollback si degrada"]
+
+    ArtifactMeta["Versión + commit"] --> Package
+    Secrets["Secretos de plataforma"] --> Staging
+    Metrics["Duración y fallas"] --> Signals
