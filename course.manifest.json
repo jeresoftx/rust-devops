@@ -42,7 +42,7 @@
       "number": 3,
       "title": "Pipelines de CI/CD",
       "slug": "pipelines-de-cicd",
-      "status": "draft",
+      "status": "implemented",
       "milestone": "03. Pipelines de CI/CD",
       "document": "docs/03-pipelines-de-cicd.md",
       "module": "src/cicd.rs",
