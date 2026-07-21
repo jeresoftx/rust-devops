@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -132,6 +132,6 @@ Un artefacto de ejecución enseñado en este capítulo debe cumplir estas reglas
 
 ## Fuera de alcance en este issue
 
-Este issue no implementa todavía el modelo Rust, no agrega ejemplos completos y
-no entrega ejercicios. Esos pasos viven en los issues siguientes del milestone
-`01. Docker`.
+Este issue no agrega todavía ejemplos completos, diagramas finales ni
+ejercicios. Esos pasos viven en los issues siguientes del milestone
+`01. Docker`. El modelo Rust mínimo ya vive en `src/docker.rs`.
