@@ -1,19 +1,71 @@
 # Gestión de releases
 
-> **Curso:** DevOps · **Capítulo:** 05 · **Prerequisitos:** Pipelines de CI/CD
-> **Código:** `src/release_management.rs` · **Video:** pendiente
+> **Curso:** DevOps · **Capítulo:** 05 · **Prerrequisitos:** Pipelines de CI/CD
+> **Código:** [`src/release_management.rs`](../src/release_management.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
 `implemented`
 
-## Concepto
+## Introducción
 
-Gestionar releases es convertir cambios técnicos en **versiones entendibles,
-trazables y comunicables**. Un release no es solo un tag; es una decisión de
-publicación con versión, alcance, riesgos, compatibilidad, notas, artefactos y
-plan de reversión.
+Gestionar releases es convertir cambios técnicos en versiones entendibles,
+trazables y comunicables. Un release no es solo un tag ni el resultado
+automático de un pipeline; es una decisión de publicación con versión, alcance,
+compatibilidad, artefactos, notas, changelog, rollback y canales de
+comunicación.
+
+Este capítulo aparece después de estrategias de despliegue porque desplegar una
+versión no es lo mismo que gestionarla. La estrategia decide cómo exponer una
+versión a usuarios. Release management decide qué identidad tiene esa versión,
+qué promete a sus consumidores y qué evidencia deja para operar el sistema
+después.
+
+## Motivación
+
+Un equipo puede tener buen código, pruebas verdes, imagen Docker publicada y un
+despliegue canary bien armado, pero aun así fallar en una pregunta básica:
+"¿qué versión está corriendo y qué cambio introdujo este comportamiento?".
+
+Cuando la respuesta vive repartida entre commits, mensajes de chat, tags
+manuales y memoria humana, cada incidente se vuelve más lento. Nadie sabe si el
+cambio era compatible, si había migración, qué artefacto salió del pipeline, a
+quién se avisó o cuál era la última versión segura.
+
+Release management reduce esa ambigüedad. Su trabajo no es burocracia: es
+memoria operativa verificable.
+
+## Teoría
+
+### Historia
+
+Antes de que el despliegue continuo se volviera común, muchos equipos
+publicaban versiones grandes en ventanas de mantenimiento. El release era un
+evento: se armaba una lista de cambios, se coordinaban responsables, se
+notificaba a usuarios y se preparaba un plan de regreso.
+
+Con CI/CD, contenedores y plataformas cloud, publicar se volvió mucho más
+frecuente. Eso trajo una tentación peligrosa: confundir "podemos desplegar cada
+merge" con "cada merge ya es un release bien gestionado".
+
+La práctica moderna intenta quedarse con lo mejor de ambos mundos: frecuencia y
+automatización, pero sin perder identidad, compatibilidad, comunicación ni
+trazabilidad.
+
+### Fundamentos
+
+Un release sano debe responder:
+
+- **Qué cambia:** fixes, features, breaking changes y migraciones.
+- **Qué versión entra:** versión semántica, tag o identificador estable.
+- **Qué artefactos se publican:** binario, imagen, paquete, chart o
+  manifiesto.
+- **De dónde salieron:** commit, digest, build o pipeline trazable.
+- **Qué compatibilidad promete:** patch, minor o major.
+- **Cómo se informa:** notas de release, changelog y canal de comunicación.
+- **Cómo se revierte:** versión segura, rollback técnico o mitigación.
+- **Quién aprueba:** criterio humano o automatizado antes de publicar.
 
 La unidad mental del capítulo es:
 
@@ -27,101 +79,189 @@ La unidad mental del capítulo es:
 Un release bien gestionado permite que otros equipos entiendan qué ocurrió sin
 leer todo el diff.
 
-## Problema
-
-Un cambio técnicamente correcto puede ser operacionalmente peligroso si nadie
-entiende qué cambió, cómo revertirlo o qué consumidores quedan afectados.
-
-El problema real aparece cuando los releases son una mezcla de commits, tags,
-mensajes de chat y memoria humana. En ese contexto, un bug no solo rompe el
-sistema: también rompe la capacidad de responder rápido. Nadie sabe si el
-cambio era breaking, qué migración aplicaba, qué feature flag lo activó o cuál
-era la última versión segura.
-
-Release management reduce esa ambigüedad. Su trabajo no es burocracia: es
-memoria operativa verificable.
-
-## Alternativas
-
-### Publicar sin versionar
-
-Cada merge o deploy se considera "la versión actual".
-
-Ventaja: simple para prototipos.
-Costo: baja trazabilidad y rollback confuso.
-
-### Tags manuales
-
-Una persona crea tags cuando considera que hay una versión.
-
-Ventaja: introduce puntos de referencia.
-Costo: puede faltar criterio consistente, changelog o relación con artefactos.
-
 ### Semantic Versioning
 
-La versión comunica compatibilidad: major, minor y patch.
+Semantic Versioning usa tres posiciones: `MAJOR.MINOR.PATCH`.
 
-Ventaja: lenguaje compartido para consumidores.
-Costo: exige disciplina para clasificar impacto real.
+- `PATCH` comunica correcciones compatibles.
+- `MINOR` comunica funcionalidad compatible.
+- `MAJOR` comunica cambio incompatible para consumidores existentes.
 
-### Changelog y release notes
+La versión no es decoración; es lenguaje de contrato. Si un cambio rompe
+compatibilidad y se publica como minor, el número miente. Esa mentira técnica
+termina costando soporte, confianza y tiempo de diagnóstico.
 
-El equipo mantiene un registro legible de cambios.
+### Changelog y notas de release
 
-Ventaja: comunica intención, riesgos y migraciones.
-Costo: si se hace tarde o con plantillas vacías, se vuelve ruido.
+El changelog es memoria acumulativa. Sirve para reconstruir la historia del
+producto o servicio.
 
-### Release trains
+Las notas de release son comunicación situada. Sirven para explicar una versión
+específica: qué incluye, por qué importa, qué riesgos tiene, qué migraciones
+requiere y qué debe observar quien la consume.
 
-Los cambios se agrupan en ventanas de release regulares.
+Un changelog sin criterio se vuelve relleno. Unas notas de release escritas al
+final, sin mirar impacto real, se vuelven una plantilla vacía. La disciplina
+está en escribir para la persona que tendrá que usar, operar o reparar el
+sistema.
 
-Ventaja: cadencia predecible.
-Costo: puede retrasar fixes urgentes o juntar demasiado riesgo.
+### Artefactos trazables
 
-## Justificación
+Un release debe poder conectarse con lo que realmente se publicó. En la práctica
+eso puede ser:
 
-Este capítulo viene después de estrategias de despliegue porque desplegar una
-versión no es lo mismo que gestionarla. La estrategia decide exposición; release
-management decide identidad, compatibilidad y comunicación del cambio.
+- una imagen Docker con digest;
+- un binario con hash;
+- un paquete publicado;
+- un chart de Kubernetes;
+- un manifiesto firmado;
+- un tag asociado a un commit.
 
-La decisión pedagógica es enseñar releases como contrato operativo: qué cambió,
-qué significa, cómo se consume y qué hacer si falla. Las herramientas pueden
-automatizar tags o notas, pero no sustituyen el criterio de clasificación.
+La pregunta importante no es "¿existe un artefacto?", sino "¿podemos demostrar
+que este artefacto salió de este cambio y corresponde a esta versión?".
 
-## Invariantes del capítulo
+### Casos de uso
 
-Un release explicado aquí debe declarar:
+En una librería, release management protege consumidores que actualizan por
+versión. En una API, ayuda a comunicar contratos, migraciones y deprecaciones.
+En una aplicación interna, reduce confusión operativa cuando soporte pregunta
+qué versión tiene un cliente. En una plataforma regulada, deja evidencia para
+auditoría, aprobación y trazabilidad.
 
-- **Versión:** número o identificador estable.
-- **Artefactos:** binario, imagen, paquete o manifiesto asociado.
-- **Cambios incluidos:** features, fixes, breaking changes y migraciones.
-- **Compatibilidad:** impacto hacia consumidores existentes.
-- **Notas de release:** texto entendible para humanos.
-- **Changelog:** historial acumulativo.
-- **Tag trazable:** referencia a commit o artefacto.
-- **Plan de rollback:** versión o acción segura de regreso.
-- **Canal de comunicación:** dónde se avisa y a quién.
-- **Criterio de aprobación:** quién decide que el release está listo.
+En todos los casos, el release es el puente entre código y operación.
 
-## Fronteras con otros capítulos
+### Ventajas y limitaciones
 
-- Pipelines de CI/CD producen evidencia y artefactos.
-- Estrategias de despliegue controlan exposición y rollback operacional.
-- Gestión de releases controla identidad, compatibilidad y comunicación.
-- Observabilidad valida el comportamiento posterior al release.
-- Operación regulada agregará auditoría, aprobaciones formales y retención.
+La ventaja principal es claridad. El equipo sabe qué cambió, qué versión lo
+contiene, qué artefacto se publicó, qué riesgo existe y cómo regresar.
 
-## Fuera de alcance en este issue
+También mejora colaboración: producto entiende qué salió, soporte sabe qué
+comunicar, operaciones sabe qué monitorear y otros equipos saben si pueden
+actualizar.
 
-Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
-Esos pasos viven en los issues siguientes del milestone
-`05. Gestión de releases`. El modelo Rust mínimo ya vive en
-`src/release_management.rs`.
+La limitación es que no se puede automatizar todo el criterio. Las herramientas
+pueden sugerir versiones, generar changelogs o publicar tags, pero no siempre
+entienden compatibilidad de negocio, contratos implícitos o migraciones
+delicadas.
 
-## Entregables del capítulo
+### Comparación con alternativas
 
-- Capítulo completo conforme a RFC-0001 §14.
-- Diagrama del ciclo versión-release-comunicación.
-- Modelo Rust mínimo de compatibilidad y riesgo de cambio.
-- Ejemplos progresivos y pruebas.
-- Métricas o justificación explícita de no aplicabilidad.
+Publicar sin versionar es suficiente para experimentos locales o prototipos,
+pero no para sistemas vivos. Tags manuales agregan puntos de referencia, aunque
+pueden quedarse sin notas, criterio o trazabilidad. Release trains dan cadencia
+predecible, pero pueden acumular riesgo si los cambios esperan demasiado.
+
+La decisión de este capítulo es usar release management como contrato
+operativo: una versión debe tener identidad, evidencia, comunicación y salida.
+
+## Diagramas
+
+El diagrama principal vive en
+[`diagrams/05-gestion-de-releases.mmd`](../diagrams/05-gestion-de-releases.mmd).
+
+```mermaid
+flowchart LR
+    Changes["Cambios clasificados"] --> Version["Versión semántica"]
+    Version --> Artifacts["Artefactos trazables"]
+    Artifacts --> Notes["Notas de release"]
+    Notes --> Changelog["Changelog"]
+    Changelog --> Communication["Comunicación"]
+    Communication --> Deployment["Despliegue"]
+    Deployment --> Observe["Observabilidad"]
+    Observe --> Decision["Continuar o rollback"]
+    Decision --> Communication
+```
+
+## Análisis de complejidad
+
+No hay complejidad asintótica relevante para el modelo educativo. El costo real
+es organizacional y operativo:
+
+| Área | Costo dominante | Riesgo principal |
+|------|-----------------|------------------|
+| Versionado | clasificar impacto | versión que no comunica compatibilidad |
+| Changelog | mantener historia útil | texto mecánico sin información accionable |
+| Artefactos | trazabilidad build-commit | publicar algo que no se puede reconstruir |
+| Comunicación | audiencia y canal | consumidores sorprendidos por el cambio |
+| Rollback | versión segura y datos | no poder regresar aunque exista tag |
+
+La complejidad crece cuando hay múltiples servicios, datos migrados, clientes
+con versiones distintas o contratos públicos.
+
+## Visualización interactiva (opcional)
+
+No aplica en este bloque. Una visualización futura puede permitir marcar tipos
+de cambio y observar cómo cambia el bump esperado, los hallazgos y la
+preparación del release.
+
+## Implementación
+
+El código vive en
+[`src/release_management.rs`](../src/release_management.rs). El módulo
+representa:
+
+- `SemanticVersion`: versión `major.minor.patch`;
+- `VersionBump`: incremento esperado;
+- `ChangeKind`: fix, feature, breaking change y migración;
+- `ReleaseArtifact`: artefacto con nombre, commit y referencia;
+- `ReleasePlan`: versión previa, versión nueva, cambios, artefactos,
+  changelog, notas, rollback y comunicación;
+- `ReleaseFinding`: hallazgos de riesgo;
+- `evaluate_release`: evaluación de preparación del release.
+
+La implementación no publica tags, no genera changelogs reales y no interactúa
+con GitHub Releases. Eso es deliberado: primero se aprende a razonar el
+contrato de release, después se automatiza con herramientas concretas.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- release minor bien documentado;
+- breaking change publicado incorrectamente como minor;
+- release sin avance de versión, sin comunicación y con artefacto no trazable.
+
+Los doctests muestran cómo construir un release compatible y evaluarlo.
+
+## Ejemplo
+
+El ejemplo ejecutable vive en
+[`examples/release_management.rs`](../examples/release_management.rs):
+
+```bash
+cargo run --example release_management
+```
+
+El ejemplo compara un release minor correcto contra un release riesgoso con
+breaking change mal versionado.
+
+## Benchmarks
+
+Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+
+Las mediciones educativas deberán evaluar el costo de revisar releases
+representativos: uno sano, uno con versión incorrecta y uno sin trazabilidad ni
+comunicación.
+
+## Ejercicios
+
+Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+
+Los ejercicios deberán cubrir al menos:
+
+- construir un release minor compatible;
+- detectar una versión semántica incorrecta;
+- endurecer un release sin trazabilidad;
+- diseñar un caso real con notas, changelog, artefactos y rollback.
+
+## Soluciones
+
+Pendiente para el siguiente issue del milestone `05. Gestión de releases`.
+
+## Referencias
+
+- Semantic Versioning.
+- Keep a Changelog.
+- Google SRE Workbook: release engineering.
+- Kubernetes documentation: Deployments and rollbacks.
+- GitHub Docs: Releases and tags.

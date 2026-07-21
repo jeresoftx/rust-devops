@@ -1,0 +1,16 @@
+flowchart LR
+    Changes["Cambios clasificados"] --> Version["Versión semántica"]
+    Version --> Compatibility["Compatibilidad"]
+    Compatibility --> Artifacts["Artefactos trazables"]
+    Artifacts --> Tag["Tag / digest"]
+    Tag --> Notes["Notas de release"]
+    Notes --> Changelog["Changelog"]
+    Changelog --> Communication["Comunicación"]
+    Communication --> Deployment["Despliegue"]
+    Deployment --> Observe["Observabilidad"]
+    Observe --> Decision["Continuar o rollback"]
+    Decision --> Communication
+
+    Rollback["Plan de rollback"] --> Decision
+    Pipeline["Pipeline CI/CD"] --> Artifacts
+    Consumers["Consumidores"] --> Communication
