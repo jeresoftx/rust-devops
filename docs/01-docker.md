@@ -1,23 +1,55 @@
 # Docker
 
 > **Curso:** DevOps · **Capítulo:** 01 · **Prerequisitos:** fundamentos de línea de comandos y procesos
-> **Código:** `src/docker.rs` · **Video:** pendiente
+> **Código:** [`src/docker.rs`](../src/docker.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
 `implemented`
 
-## Concepto
+## Introducción
 
-Docker se estudia aquí como un **contrato de ejecución reproducible**. Ese
-contrato responde una pregunta concreta: si un servicio necesita archivos,
-variables de entorno, puertos, usuario, proceso principal, sistema de archivos
-y límites de recursos, ¿cómo se describe todo eso para que pueda ejecutarse de
-forma consistente fuera de la laptop original?
+Docker es la primera pieza operativa del curso porque convierte una aplicación
+en un artefacto ejecutable con frontera clara. Antes de hablar de pipelines,
+Kubernetes o despliegues progresivos, necesitamos saber qué estamos moviendo de
+un ambiente a otro.
 
-La unidad central no es el comando `docker run`, sino la relación entre tres
-piezas:
+En este capítulo se estudia Docker como un contrato de ejecución reproducible:
+imagen, contenedor, configuración, puertos, volúmenes, proceso principal y
+límites de recursos. El lector debe conocer procesos, variables de entorno y
+nociones básicas de red local.
+
+## Motivación
+
+La frase "en mi máquina sí funciona" no suele describir un misterio técnico.
+Describe un contrato oculto. Quizá la laptop tenía una versión específica de
+OpenSSL, un archivo `.env`, una dependencia instalada a mano, un directorio
+temporal, permisos especiales o un comando que nunca llegó al README.
+
+Docker no vuelve correcto a un sistema por sí mismo, pero obliga a declarar
+parte de ese contrato. Una imagen dice qué filesystem, metadata y proceso se
+esperan. Un contenedor dice cómo se ejecuta esa imagen en un ambiente concreto.
+El trabajo de DevOps empieza cuando ese contrato deja de depender de memoria
+humana.
+
+## Teoría
+
+### Historia
+
+Los contenedores no nacieron con Docker. Unix ya tenía ideas de aislamiento de
+procesos, y Linux agregó primitivas como namespaces y cgroups para separar
+vistas del sistema y limitar recursos. Docker, publicado en 2013, hizo
+accesible esa combinación con una experiencia simple: construir una imagen,
+publicarla y ejecutarla de forma repetible.
+
+La lección histórica no es "Docker inventó los contenedores". La lección es que
+una buena herramienta puede convertir primitivas difíciles en una unidad de
+trabajo entendible para equipos completos.
+
+### Fundamentos
+
+La unidad central es la relación entre tres piezas:
 
 - **Imagen:** artefacto inmutable que empaqueta filesystem, metadata y punto de
   entrada.
@@ -26,112 +58,121 @@ piezas:
 - **Registro:** lugar donde se publica y recupera la imagen que otros ambientes
   ejecutarán.
 
-El capítulo no trata Docker como magia de infraestructura. Lo trata como una
-frontera explícita entre construir software y operarlo.
+Una imagen debe tener tag explícito, proceso principal, usuario de ejecución,
+puertos documentados y ausencia de secretos horneados. Un contenedor debe
+declarar configuración de runtime, puertos publicados, montajes para datos
+persistentes y límites de recursos cuando el ambiente lo requiera.
 
-## Problema
+### Casos de uso
 
-Un sistema que solo funciona en la máquina de quien lo desarrolló no es
-operable. La frase "en mi máquina sí funciona" casi siempre es síntoma de que
-el contrato de ejecución está escondido en estado local: una versión de runtime,
-un archivo presente por accidente, una variable de entorno olvidada, una
-dependencia instalada manualmente o un comando que nadie documentó.
+Docker es útil cuando se necesita:
 
-Docker reduce esa ambigüedad, pero no elimina el criterio. Una mala imagen
-puede ser enorme, insegura, lenta de construir, difícil de cachear o incapaz de
-recibir señales correctamente. Enseñar Docker solo como lista de comandos
-produce usuarios de herramienta; enseñar sus invariantes forma operadores de
-sistemas.
+- ejecutar el mismo servicio en desarrollo, CI y staging;
+- publicar artefactos que un pipeline pueda promover;
+- aislar dependencias de un servicio sin instalar todo en el host;
+- probar integraciones locales con bases de datos, colas o cachés;
+- preparar la unidad mínima que después orquestará Kubernetes.
 
-## Alternativas
+### Ventajas y limitaciones
 
-### Ejecutar directamente en el host
+Docker mejora reproducibilidad, empaquetado y portabilidad. También reduce el
+tiempo entre "compilé el servicio" y "puedo ejecutarlo en otro ambiente".
 
-Es la alternativa más simple. El binario o runtime vive en la máquina destino y
-el proceso se administra con herramientas del sistema operativo.
+Pero tiene costos: una imagen mal construida puede ser pesada, insegura, lenta
+de cachear o difícil de depurar. Un contenedor comparte kernel con el host; no
+es una máquina virtual. Un tag como `latest` puede romper reproducibilidad. Un
+secreto dentro de la imagen puede viajar a cada ambiente donde se publique.
 
-Ventaja: menos capas y menos abstracción.  
-Costo: el ambiente queda implícito y es más fácil que desarrollo, CI y
-producción diverjan.
+### Comparación con alternativas
 
-### Máquinas virtuales
+Ejecutar en el host es más simple, pero deja el ambiente demasiado implícito.
+Las máquinas virtuales aíslan más, pero cargan un sistema operativo completo y
+son más pesadas para ciclos rápidos. PaaS y serverless reducen operación
+directa, pero esconden parte del contrato y aumentan dependencia del proveedor.
 
-Una VM empaqueta un sistema operativo completo. Sirve cuando se necesita
-aislamiento fuerte o kernels distintos.
+Docker ocupa un punto medio: suficiente estructura para declarar cómo corre un
+servicio, sin convertir cada despliegue en administración completa de máquinas.
 
-Ventaja: frontera más amplia y familiar para infraestructura clásica.  
-Costo: arranque más lento, mayor consumo y menor granularidad para servicios
-pequeños.
+## Diagramas
 
-### Contenedores OCI
+El diagrama principal vive en
+[`diagrams/01-docker.mmd`](../diagrams/01-docker.mmd). Resume el flujo:
+fuente, build context, imagen, registro, contenedor y señales operativas.
 
-Docker popularizó esta forma de empaquetar procesos aislados. Hoy el estándar
-operativo relevante es OCI: imágenes y runtimes compatibles, no una sola
-herramienta.
+```mermaid
+flowchart LR
+    Source["Código fuente"] --> Context["Build context"]
+    Context --> Image["Imagen versionada"]
+    Image --> Registry["Registro"]
+    Registry --> Runtime["Runtime"]
+    Runtime --> Container["Contenedor"]
+    Config["Configuración externa"] --> Container
+    Volumes["Volúmenes"] --> Container
+    Container --> Signals["Logs, puertos y señales"]
+```
 
-Ventaja: buen equilibrio entre reproducibilidad, portabilidad y costo
-operativo.  
-Costo: sigue compartiendo kernel con el host y requiere disciplina de seguridad,
-capas, secretos y ciclo de vida.
+## Análisis de complejidad
 
-### Plataformas PaaS o serverless
+El capítulo no introduce un algoritmo con complejidad asintótica. El costo
+relevante es operativo:
 
-Algunas plataformas esconden el contenedor o lo convierten en detalle interno.
+| Operación | Costo dominante | Qué lo afecta |
+|-----------|-----------------|---------------|
+| Build de imagen | tiempo de transferencia y cómputo | tamaño del contexto, cache de capas, instalación de dependencias |
+| Pull de imagen | red y almacenamiento | tamaño comprimido, proximidad del registro, cache local |
+| Arranque de contenedor | inicialización del proceso | entrypoint, carga de configuración, warming de aplicación |
+| Investigación de falla | observabilidad disponible | logs, health checks, tags, metadata y trazabilidad |
 
-Ventaja: menos operación directa para el equipo.  
-Costo: menor control del contrato de ejecución y dependencia de las decisiones
-del proveedor.
+La medición concreta se agregará en el cierre del milestone. Por ahora, el
+modelo Rust permite discutir qué decisiones hacen más o menos operable el
+contrato.
 
-## Justificación
+## Visualización interactiva (opcional)
 
-Este curso empieza por Docker porque es la bisagra entre desarrollo y
-operación. Antes de hablar de Kubernetes, pipelines, despliegues o
-observabilidad, el estudiante necesita entender qué se está construyendo,
-moviendo y ejecutando.
+No aplica en este bloque. Una visualización futura podría permitir activar o
+desactivar invariantes del contrato y observar los hallazgos resultantes.
 
-La decisión pedagógica es enseñar primero el modelo mental:
+## Implementación
 
-1. Una imagen debe ser reproducible.
-2. Un contenedor debe comportarse como un proceso bien definido.
-3. La configuración de ejecución debe ser explícita.
-4. Los datos persistentes no deben confundirse con el filesystem efímero del
-   contenedor.
-5. La seguridad empieza en la imagen, no en producción.
+El código vive en [`src/docker.rs`](../src/docker.rs). El módulo representa:
 
-Los comandos aparecen después, como consecuencia del modelo.
+- `ImageSpec`: imagen Docker/OCI como artefacto inmutable;
+- `ContainerSpec`: contenedor como configuración de ejecución;
+- `PortMapping`: puertos internos y publicados;
+- `VolumeMount`: datos fuera del filesystem efímero;
+- `validate_execution_contract`: revisión de invariantes operativas.
 
-## Invariantes del capítulo
+La implementación no invoca Docker. Eso es deliberado: el primer objetivo es
+razonar sobre el contrato antes de automatizar comandos.
 
-Un artefacto de ejecución enseñado en este capítulo debe cumplir estas reglas:
+## Pruebas
 
-- **Reproducibilidad:** la misma fuente debe producir una imagen equivalente sin
-  depender de archivos locales no declarados.
-- **Inmutabilidad:** una imagen publicada no se modifica; se reemplaza por otra
-  versión.
-- **Proceso principal claro:** el contenedor ejecuta un proceso principal que
-  recibe señales y termina de forma controlada.
-- **Configuración externa:** lo que cambia por ambiente se declara como
-  configuración, no se hornea dentro de la imagen.
-- **Datos fuera del contenedor:** el estado duradero vive en volúmenes, bases de
-  datos o servicios externos.
-- **Mínimo privilegio:** la imagen evita permisos innecesarios, secretos
-  incluidos y superficie de ataque accidental.
-- **Observabilidad básica:** stdout/stderr son parte del contrato operativo; un
-  contenedor silencioso ante fallas es difícil de operar.
+Las pruebas unitarias cubren dos rutas:
 
-## Fronteras con otros cursos
+- un contrato sano sin hallazgos;
+- un contrato problemático con tag `latest`, root, entrypoint vacío, secreto
+  horneado, puerto no declarado y ausencia de límite de memoria.
 
-- `rust-cloud` enseña plataformas: cómputo, red, identidad, almacenamiento,
-  servicios manejados y costos.
-- `rust-software-architecture` enseña cómo se organiza el sistema y sus
-  fronteras internas.
-- `rust-devops` enseña cómo se empaqueta, libera, observa y repara ese sistema
-  cuando vive fuera de la máquina de desarrollo.
-- `rust-security` profundizará en hardening ofensivo/defensivo; aquí solo se
-  cubren prácticas mínimas de imagen segura.
+Los doctests de la API pública muestran el uso mínimo de `PortMapping` y
+`validate_execution_contract`.
 
-## Fuera de alcance en este issue
+## Benchmarks
 
-Este issue no agrega todavía ejemplos completos, diagramas finales ni
-ejercicios. Esos pasos viven en los issues siguientes del milestone
-`01. Docker`. El modelo Rust mínimo ya vive en `src/docker.rs`.
+Pendiente del issue de mediciones del milestone `01. Docker`. La sección final
+debe distinguir entre microbenchmarks de Rust y métricas operativas como tamaño
+de imagen, tiempo de build, tiempo de pull o tiempo de arranque.
+
+## Ejercicios
+
+Pendiente del issue de ejercicios del milestone `01. Docker`.
+
+## Soluciones
+
+Pendiente del issue de ejercicios del milestone `01. Docker`.
+
+## Referencias
+
+- Open Container Initiative: Image Format Specification.
+- Docker documentation: Dockerfile reference.
+- Linux manual pages: namespaces and cgroups.
+- Google SRE Workbook: prácticas de confiabilidad y señales operativas.

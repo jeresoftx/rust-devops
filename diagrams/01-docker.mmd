@@ -1,0 +1,17 @@
+flowchart LR
+    Source["Código fuente"] --> Context["Build context"]
+    Context --> Build["docker build"]
+    Build --> Image["Imagen OCI\nrepositorio:tag"]
+    Image --> Registry["Registro"]
+    Registry --> Pull["docker pull"]
+    Pull --> Runtime["Runtime"]
+    Runtime --> Container["Contenedor\nproceso principal"]
+
+    Config["Variables de entorno"] --> Container
+    Ports["Puertos publicados"] --> Container
+    Volumes["Volúmenes y bind mounts"] --> Container
+    Limits["Límites de recursos"] --> Container
+
+    Container --> Logs["stdout/stderr"]
+    Container --> Signals["SIGTERM/SIGINT"]
+    Container --> Exit["Código de salida"]
