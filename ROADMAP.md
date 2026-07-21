@@ -17,6 +17,12 @@ Project asociado al repositorio. Cada paso accionable queda asignado a
 `jeresoftx`, asociado al milestone correspondiente y etiquetado para conservar
 la regla del repositorio: un issue, un commit y un PR.
 
+El GitHub Project del curso vive en
+`https://github.com/users/jeresoftx/projects/11`. Debe permanecer asociado al
+repositorio, contener todos los issues accionables y tener la vista principal
+agrupada por `Milestone`. Esta agrupación es requisito de aceptación del
+andamiaje de GitHub, no una recomendación visual.
+
 Ningún capítulo está marcado como `reviewed` ni `published`, porque la revisión
 humana de Joel sigue siendo obligatoria según RFC-0001 §20.
 

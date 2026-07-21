@@ -94,9 +94,10 @@ cargo test --doc
   Cloud, arquitectura y SRE.
 - `ROADMAP.md` registra el avance del curso sin convertirlo en una fecha
   límite.
-- El GitHub Project del curso debe vivir bajo la cuenta `jeresoftx`, asociado
-  al repositorio, con todos los issues accionables y vista principal agrupada
-  por `Milestone`.
+- El GitHub Project del curso vive en
+  `https://github.com/users/jeresoftx/projects/11`.
+- Ese Project está asociado al repositorio, contiene todos los issues
+  accionables y su vista principal está agrupada por `Milestone`.
 - Antes de tocar código de curso, el plan completo debe existir como milestones
   e issues de GitHub.
 - `LICENSE.md` resume la doble licencia: código bajo `MIT OR Apache-2.0`;
