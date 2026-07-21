@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -229,26 +229,78 @@ log suelto, sin métricas, sin trazas y sin contexto suficiente.
 
 ## Benchmarks
 
-Pendiente para el siguiente issue del milestone `06. Observabilidad`.
+El benchmark educativo vive en
+[`benches/observability_baseline.rs`](../benches/observability_baseline.rs):
 
-Las mediciones educativas deberán evaluar el costo de revisar planes de
-observabilidad representativos: uno completo, uno incompleto y uno con
-cardinalidad riesgosa.
+```bash
+cargo bench --bench observability_baseline
+```
+
+Ese benchmark mide el costo de evaluar tres planes educativos: uno observable,
+uno con un log suelto sin contexto y uno con métrica de cardinalidad riesgosa.
+No mide OpenTelemetry, agentes, almacenamiento, consultas PromQL, dashboards ni
+backends reales de trazas.
+
+En producción, las métricas relevantes son:
+
+- volumen de logs por servicio y versión;
+- cardinalidad de métricas por etiqueta;
+- porcentaje de trazas completas entre servicios;
+- latencia de ingestión de telemetría;
+- tiempo para encontrar una señal durante un incidente;
+- costo de retención por tipo de señal;
+- porcentaje de alertas accionables;
+- porcentaje de releases con señales comparables antes/después.
+
+La regla práctica: usa el benchmark para verificar que el modelo educativo siga
+barato; usa métricas reales de telemetría para decidir si observar el sistema
+es sostenible.
 
 ## Ejercicios
 
-Pendiente para el siguiente issue del milestone `06. Observabilidad`.
+### Nivel 1: salud de release observable
 
-Los ejercicios deberán cubrir al menos:
+Construye un plan para responder si `checkout-api` versión `v1.2.0` está sana
+en producción. Debe incluir log estructurado, métrica, traza, correlación,
+retención y acciones operativas.
 
-- construir un plan observable para salud de release;
-- detectar logs sin estructura y señales sin contexto;
-- corregir una métrica con cardinalidad riesgosa;
-- diseñar un caso real con pregunta, señales, contexto, retención y acción.
+Objetivo: explicar por qué el plan puede considerarse observable.
+
+### Nivel 2: diagnóstico con log suelto
+
+Construye un plan que solo tenga un log de error sin estructura, sin servicio,
+sin ambiente, sin versión, sin retención y sin acción.
+
+Objetivo: identificar por qué el equipo no podría diagnosticar producción con
+esa señal aislada.
+
+### Nivel 3: corregir cardinalidad riesgosa
+
+Parte de una métrica `requests_by_user_id` marcada como alta cardinalidad.
+Después rediseña la señal para conservar utilidad operativa sin etiquetar por
+usuario individual.
+
+Objetivo: comparar el hallazgo antes/después y explicar el costo de cardinalidad.
+
+### Nivel 4: caso real guiado
+
+Diseña observabilidad para un servicio real o plausible de Softrek/Jeresoft
+Academy. Declara pregunta operativa, logs, métricas, trazas, eventos, contexto,
+retención, dueño y acción.
+
+Objetivo: construir señales que respondan preguntas reales, no solo dashboards.
 
 ## Soluciones
 
-Pendiente para el siguiente issue del milestone `06. Observabilidad`.
+- Nivel 1:
+  [`examples/soluciones/observability_nivel_1.rs`](../examples/soluciones/observability_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/observability_nivel_2.rs`](../examples/soluciones/observability_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/observability_nivel_3.rs`](../examples/soluciones/observability_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al servicio elegido
+por el estudiante.
 
 ## Referencias
 

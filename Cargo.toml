@@ -71,6 +71,18 @@ path = "examples/soluciones/release_management_nivel_2.rs"
 name = "release_management_nivel_3"
 path = "examples/soluciones/release_management_nivel_3.rs"
 
+[[example]]
+name = "observability_nivel_1"
+path = "examples/soluciones/observability_nivel_1.rs"
+
+[[example]]
+name = "observability_nivel_2"
+path = "examples/soluciones/observability_nivel_2.rs"
+
+[[example]]
+name = "observability_nivel_3"
+path = "examples/soluciones/observability_nivel_3.rs"
+
 [[bench]]
 name = "docker_baseline"
 path = "benches/docker_baseline.rs"
@@ -94,4 +106,9 @@ harness = false
 [[bench]]
 name = "release_management_baseline"
 path = "benches/release_management_baseline.rs"
+harness = false
+
+[[bench]]
+name = "observability_baseline"
+path = "benches/observability_baseline.rs"
 harness = false

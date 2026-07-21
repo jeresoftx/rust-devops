@@ -54,3 +54,14 @@ Para operación real, el capítulo documenta métricas más relevantes: tiempo d
 release, artefactos trazables, releases con rollback documentado, cambios
 incompatibles detectados antes de publicar y tiempo para identificar la última
 versión segura.
+
+## Observabilidad
+
+`observability_baseline.rs` mide el costo de evaluar planes educativos de logs,
+métricas, trazas, contexto, retención, cardinalidad y acción. No mide
+OpenTelemetry, agentes, almacenamiento, consultas PromQL, dashboards ni backends
+reales de trazas.
+
+Para operación real, el capítulo documenta métricas más relevantes: volumen de
+logs, cardinalidad de métricas, trazas completas, latencia de ingestión, costo
+de retención, alertas accionables y releases con señales comparables.

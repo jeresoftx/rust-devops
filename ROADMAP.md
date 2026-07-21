@@ -48,7 +48,7 @@ progresión esperada es:
 | 03 | Pipelines de CI/CD | benchmarked |
 | 04 | Estrategias de despliegue | benchmarked |
 | 05 | Gestión de releases | benchmarked |
-| 06 | Observabilidad | implemented |
+| 06 | Observabilidad | benchmarked |
 | 07 | Stack Grafana | planned |
 | 08 | Alertas, SLOs y SLIs | planned |
 | 09 | Retención de telemetría | planned |
@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Trabajar el milestone `06. Observabilidad` con el mismo flujo: especificación
+Trabajar el milestone `07. Stack Grafana` con el mismo flujo: especificación
 conceptual, modelo Rust mínimo, capítulo/diagrama/ejemplos, ejercicios,
 soluciones y validación automatizada.

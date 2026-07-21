@@ -84,7 +84,7 @@
       "number": 6,
       "title": "Observabilidad",
       "slug": "observabilidad",
-      "status": "implemented",
+      "status": "benchmarked",
       "milestone": "06. Observabilidad",
       "document": "docs/06-observabilidad.md",
       "module": "src/observability.rs",
