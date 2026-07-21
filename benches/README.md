@@ -23,3 +23,13 @@ controllers reales.
 Para operación real, el capítulo documenta métricas más relevantes: duración de
 rollout, tiempo a readiness, eventos de scheduling, capacidad disponible,
 latencia del control plane y frecuencia de reinicios.
+
+## Pipelines de CI/CD
+
+`cicd_baseline.rs` mide el costo de evaluar pipelines educativos contra reglas
+de promoción. No mide runners, colas, red, registros de imágenes ni plataformas
+reales de CI/CD.
+
+Para operación real, el capítulo documenta métricas más relevantes: duración
+total, tiempo en cola, cache hit rate, etapa más lenta, tasa de fallos por
+etapa, tiempo de recuperación y frecuencia de reintentos manuales.

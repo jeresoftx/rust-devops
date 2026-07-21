@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -170,18 +170,76 @@ development.
 
 ## Benchmarks
 
-Pendiente del issue de mediciones del milestone `03. Pipelines de CI/CD`. La
-medición debe distinguir entre el costo del modelo Rust y las métricas reales
-de operación: duración del pipeline, tiempo de cola, cache hit rate, etapa más
-lenta, tasa de fallos y tiempo de recuperación.
+El benchmark educativo vive en
+[`benches/cicd_baseline.rs`](../benches/cicd_baseline.rs):
+
+```bash
+cargo bench --bench cicd_baseline
+```
+
+Ese benchmark mide el costo de evaluar tres pipelines educativos: pull request
+sano, staging bloqueado por una prueba fallida y producción completa con
+aprobación y rollback. No mide runners reales ni plataformas de CI/CD.
+
+En producción, las métricas relevantes son:
+
+- duración total del pipeline;
+- tiempo en cola antes de ejecutar;
+- etapa más lenta;
+- porcentaje de cache hit;
+- tasa de fallos por etapa;
+- frecuencia de reintentos manuales;
+- tiempo entre merge y artefacto publicable;
+- tiempo de recuperación cuando un release falla.
+
+La regla práctica: usa el benchmark para vigilar que el modelo educativo siga
+siendo barato; usa métricas de la plataforma para mejorar la operación real.
 
 ## Ejercicios
 
-Pendiente del issue de ejercicios del milestone `03. Pipelines de CI/CD`.
+### Nivel 1: pull request sano
+
+Construye un pipeline de `PullRequest` hacia `Development` con gates de formato,
+lint, pruebas y build. Todos deben pasar.
+
+Objetivo: explicar por qué no necesita artefacto ni aprobación de producción.
+
+### Nivel 2: gate fallido en staging
+
+Construye un pipeline hacia `Staging` con formato, lint, pruebas, build,
+package, deploy y artefacto trazable. Marca `cargo test` como fallido.
+
+Objetivo: confirmar que un gate obligatorio fallido bloquea la promoción aunque
+el resto del pipeline exista.
+
+### Nivel 3: endurecer producción
+
+Parte de un pipeline de producción incompleto: sin seguridad, package,
+aprobación, deploy, artefacto trazable ni rollback. Luego construye la versión
+corregida.
+
+Objetivo: comparar los hallazgos antes/después y explicar qué evidencia exige
+producción.
+
+### Nivel 4: caso real guiado
+
+Diseña el pipeline mínimo para un servicio real o plausible de Softrek/Jeresoft
+Academy. Declara trigger, stages, gates, artefacto, ambientes, secretos,
+observabilidad y rollback.
+
+Objetivo: diseñar una cadena de entrega operable antes de escribir YAML.
 
 ## Soluciones
 
-Pendiente del issue de ejercicios del milestone `03. Pipelines de CI/CD`.
+- Nivel 1:
+  [`examples/soluciones/cicd_nivel_1.rs`](../examples/soluciones/cicd_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/cicd_nivel_2.rs`](../examples/soluciones/cicd_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/cicd_nivel_3.rs`](../examples/soluciones/cicd_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al servicio elegido
+por el estudiante.
 
 ## Referencias
 
