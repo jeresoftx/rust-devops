@@ -56,7 +56,7 @@
       "number": 4,
       "title": "Estrategias de despliegue",
       "slug": "estrategias-de-despliegue",
-      "status": "planned",
+      "status": "draft",
       "milestone": "04. Estrategias de despliegue",
       "document": "docs/04-estrategias-de-despliegue.md",
       "module": "src/deployment_strategies.rs",
