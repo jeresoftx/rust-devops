@@ -37,7 +37,7 @@ forma disciplinada de cambiar, liberar, observar y reparar.
 | 01 | Docker | `src/docker.rs` | benchmarked |
 | 02 | Kubernetes | `src/kubernetes.rs` | benchmarked |
 | 03 | Pipelines de CI/CD | `src/cicd.rs` | benchmarked |
-| 04 | Estrategias de despliegue | `src/deployment_strategies.rs` | planned |
+| 04 | Estrategias de despliegue | `src/deployment_strategies.rs` | draft |
 | 05 | Gestión de releases | `src/release_management.rs` | planned |
 | 06 | Observabilidad | `src/observability.rs` | planned |
 | 07 | Stack Grafana | `src/grafana_stack.rs` | planned |
