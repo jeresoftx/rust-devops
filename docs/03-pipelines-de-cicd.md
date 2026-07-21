@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -123,9 +123,9 @@ Un pipeline explicado en este capítulo debe declarar:
 
 ## Fuera de alcance en este issue
 
-Este issue no agrega todavía el modelo Rust, ejemplos completos, diagrama final
-ni ejercicios. Esos pasos viven en los issues siguientes del milestone
-`03. Pipelines de CI/CD`.
+Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
+Esos pasos viven en los issues siguientes del milestone
+`03. Pipelines de CI/CD`. El modelo Rust mínimo ya vive en `src/cicd.rs`.
 
 ## Entregables del capítulo
 

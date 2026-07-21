@@ -4,6 +4,7 @@
 //! gobernanza, el plan y el contrato educativo. Los capítulos posteriores
 //! agregarán módulos por concepto operativo conforme a RFC-0001 §14.
 
+pub mod cicd;
 pub mod docker;
 pub mod kubernetes;
 
@@ -64,7 +65,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 3,
         title: "Pipelines de CI/CD",
-        status: ChapterStatus::Draft,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 4,
@@ -128,6 +129,6 @@ mod tests {
         );
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
-        assert_eq!(chapters[2].status, ChapterStatus::Draft);
+        assert_eq!(chapters[2].status, ChapterStatus::Implemented);
     }
 }
