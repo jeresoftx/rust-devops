@@ -1,0 +1,18 @@
+flowchart LR
+    Users["Usuarios"] --> Router["Router / balanceador"]
+    Router --> Old["Versión actual"]
+    Router --> New["Versión nueva"]
+
+    Old --> StableSignals["Señales base"]
+    New --> NewSignals["Señales nuevas"]
+    StableSignals --> Compare["Comparar salud"]
+    NewSignals --> Compare
+    Compare --> Decision["Continuar, pausar o rollback"]
+    Decision --> Router
+
+    Canary["Canary 5-10%"] --> New
+    Rolling["Rolling por instancias"] --> New
+    BlueGreen["Blue-green"] --> Router
+    Flags["Feature flags"] --> New
+    Rollback["Rollback"] --> Old
+    Decision --> Rollback
