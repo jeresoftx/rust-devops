@@ -5,6 +5,7 @@
 //! agregarán módulos por concepto operativo conforme a RFC-0001 §14.
 
 pub mod cicd;
+pub mod deployment_strategies;
 pub mod docker;
 pub mod kubernetes;
 
@@ -70,7 +71,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 4,
         title: "Estrategias de despliegue",
-        status: ChapterStatus::Draft,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 5,
@@ -130,6 +131,6 @@ mod tests {
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);
-        assert_eq!(chapters[3].status, ChapterStatus::Draft);
+        assert_eq!(chapters[3].status, ChapterStatus::Implemented);
     }
 }
