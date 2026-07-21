@@ -13,3 +13,13 @@ si `cargo bench` aplica o no.
 No mide el daemon ni el build real de imágenes. Para operación real, el capítulo
 documenta métricas más relevantes: tamaño de imagen, tiempo de build, tiempo de
 pull, tiempo de arranque y calidad de señales operativas.
+
+## Kubernetes
+
+`kubernetes_baseline.rs` mide el costo de reconciliar especificaciones
+educativas contra estado observado. No mide API server, scheduler, etcd ni
+controllers reales.
+
+Para operación real, el capítulo documenta métricas más relevantes: duración de
+rollout, tiempo a readiness, eventos de scheduling, capacidad disponible,
+latencia del control plane y frecuencia de reinicios.

@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -162,17 +162,79 @@ de reconciliación.
 
 ## Benchmarks
 
-Pendiente del issue de mediciones del milestone `02. Kubernetes`. La medición
-debe separar el costo del modelo educativo de las métricas reales: duración de
-rollout, tiempo a readiness, eventos de scheduling y capacidad disponible.
+El benchmark educativo vive en
+[`benches/kubernetes_baseline.rs`](../benches/kubernetes_baseline.rs):
+
+```bash
+cargo bench --bench kubernetes_baseline
+```
+
+Ese benchmark mide el costo de ejecutar el modelo Rust del capítulo sobre dos
+escenarios: una aplicación sana con una réplica faltante y una aplicación con
+contrato operativo incompleto. No mide Kubernetes real.
+
+En producción, las métricas relevantes son otras:
+
+- duración del rollout;
+- tiempo hasta readiness;
+- eventos de scheduling;
+- presión de CPU y memoria;
+- reinicios por liveness;
+- errores por configuración o permisos;
+- latencia del control plane.
+
+La regla práctica: usa el benchmark para verificar que el modelo educativo siga
+siendo barato y estable; usa observabilidad del cluster para decidir operación
+real.
 
 ## Ejercicios
 
-Pendiente del issue de ejercicios del milestone `02. Kubernetes`.
+### Nivel 1: leer una reconciliación sana
+
+Construye una aplicación `billing-api` con imagen versionada, tres réplicas,
+puerto `8080`, readiness, liveness y recursos declarados. Observa el cluster con
+dos réplicas existentes y dos listas.
+
+Objetivo: explicar por qué el plan contiene `ScaleUp(1)` y
+`WaitForReadiness(1)`.
+
+### Nivel 2: detectar contrato incompleto
+
+Construye una aplicación con imagen `latest`, cero réplicas, sin probes, sin
+recursos y un service que apunta al workload incorrecto y a un puerto no
+declarado.
+
+Objetivo: identificar los hallazgos antes de ejecutar el código y luego
+confirmarlos con `reconcile`.
+
+### Nivel 3: endurecer una especificación
+
+Parte de una especificación insegura y conviértela en una especificación lista
+para operar: imagen versionada, réplicas explícitas, puerto declarado, service
+coherente, probes y recursos.
+
+Objetivo: comparar el plan antes/después y demostrar que los hallazgos
+desaparecen.
+
+### Nivel 4: caso real guiado
+
+Toma un servicio real o plausible de Softrek/Jeresoft Academy y describe su
+estado deseado antes de escribir YAML: réplicas, puertos, configuración, probes,
+recursos, rollout y señales de salud.
+
+Objetivo: razonar como arquitecto-operador, no como copiador de manifiestos.
 
 ## Soluciones
 
-Pendiente del issue de ejercicios del milestone `02. Kubernetes`.
+- Nivel 1:
+  [`examples/soluciones/kubernetes_nivel_1.rs`](../examples/soluciones/kubernetes_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/kubernetes_nivel_2.rs`](../examples/soluciones/kubernetes_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/kubernetes_nivel_3.rs`](../examples/soluciones/kubernetes_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al contexto real del
+servicio elegido por el estudiante.
 
 ## Referencias
 
