@@ -6,7 +6,7 @@
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Concepto
 
@@ -113,9 +113,10 @@ Un release explicado aquí debe declarar:
 
 ## Fuera de alcance en este issue
 
-Este issue no agrega todavía el modelo Rust, ejemplos completos, diagrama final
-ni ejercicios. Esos pasos viven en los issues siguientes del milestone
-`05. Gestión de releases`.
+Este issue no agrega todavía ejemplos completos, diagrama final ni ejercicios.
+Esos pasos viven en los issues siguientes del milestone
+`05. Gestión de releases`. El modelo Rust mínimo ya vive en
+`src/release_management.rs`.
 
 ## Entregables del capítulo
 

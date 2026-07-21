@@ -8,6 +8,7 @@ pub mod cicd;
 pub mod deployment_strategies;
 pub mod docker;
 pub mod kubernetes;
+pub mod release_management;
 
 /// Nombre público del curso dentro de Jeresoft Academy.
 pub const COURSE_NAME: &str = "DevOps";
@@ -76,7 +77,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 5,
         title: "Gestión de releases",
-        status: ChapterStatus::Draft,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 6,
@@ -132,6 +133,6 @@ mod tests {
         assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[3].status, ChapterStatus::Benchmarked);
-        assert_eq!(chapters[4].status, ChapterStatus::Draft);
+        assert_eq!(chapters[4].status, ChapterStatus::Implemented);
     }
 }

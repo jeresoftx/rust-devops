@@ -38,7 +38,7 @@ forma disciplinada de cambiar, liberar, observar y reparar.
 | 02 | Kubernetes | `src/kubernetes.rs` | benchmarked |
 | 03 | Pipelines de CI/CD | `src/cicd.rs` | benchmarked |
 | 04 | Estrategias de despliegue | `src/deployment_strategies.rs` | benchmarked |
-| 05 | Gestión de releases | `src/release_management.rs` | draft |
+| 05 | Gestión de releases | `src/release_management.rs` | implemented |
 | 06 | Observabilidad | `src/observability.rs` | planned |
 | 07 | Stack Grafana | `src/grafana_stack.rs` | planned |
 | 08 | Alertas, SLOs y SLIs | `src/reliability_targets.rs` | planned |
