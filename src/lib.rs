@@ -21,6 +21,8 @@ pub enum ChapterStatus {
     Draft,
     /// El capítulo ya expone un modelo Rust mínimo verificable.
     Implemented,
+    /// El capítulo tiene mediciones o justificación explícita de costos.
+    Benchmarked,
 }
 
 /// Describe un capítulo planeado del curso.
@@ -51,7 +53,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 1,
         title: "Docker",
-        status: ChapterStatus::Implemented,
+        status: ChapterStatus::Benchmarked,
     },
     Chapter {
         number: 2,
@@ -123,6 +125,6 @@ mod tests {
                 .skip(1)
                 .all(|chapter| chapter.status == ChapterStatus::Planned)
         );
-        assert_eq!(chapters[0].status, ChapterStatus::Implemented);
+        assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
     }
 }

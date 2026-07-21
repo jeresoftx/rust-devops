@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Introducción
 
@@ -158,17 +158,67 @@ Los doctests de la API pública muestran el uso mínimo de `PortMapping` y
 
 ## Benchmarks
 
-Pendiente del issue de mediciones del milestone `01. Docker`. La sección final
-debe distinguir entre microbenchmarks de Rust y métricas operativas como tamaño
-de imagen, tiempo de build, tiempo de pull o tiempo de arranque.
+Este capítulo no mide Docker real todavía: el modelo no invoca daemon, build ni
+registro. La medición disponible en
+[`benches/docker_baseline.rs`](../benches/docker_baseline.rs) mide el costo de
+validar contratos educativos muchas veces para comprobar que el modelo se puede
+usar en ejemplos y laboratorios sin costo apreciable.
+
+Ejecutar:
+
+```bash
+cargo bench --bench docker_baseline
+```
+
+La medición importante de producción no es esa micro-medición. En un sistema
+real, este capítulo debe llevar al lector a observar:
+
+- tamaño comprimido y descomprimido de la imagen;
+- tiempo de build con y sin cache;
+- tiempo de pull desde el registro usado por CI o staging;
+- tiempo entre iniciar el contenedor y aceptar tráfico;
+- calidad de logs y señales al recibir `SIGTERM`;
+- facilidad para reproducir localmente un fallo de runtime.
+
+Cuando esos números contradigan la intuición, se documenta el hallazgo. En
+DevOps, medir no sirve para decorar: sirve para corregir decisiones.
 
 ## Ejercicios
 
-Pendiente del issue de ejercicios del milestone `01. Docker`.
+### Nivel 1: contrato sano
+
+Construye una `ImageSpec` con tag explícito, usuario no root, entrypoint y
+puerto expuesto. Crea un `ContainerSpec` que publique ese puerto y declare un
+límite de memoria. La validación debe regresar cero hallazgos.
+
+### Nivel 2: contrato riesgoso
+
+Construye una imagen con tag `latest`, usuario `root`, entrypoint vacío y una
+variable `DATABASE_PASSWORD` horneada. Publica un puerto no declarado y omite
+el límite de memoria. La validación debe reportar todos esos problemas.
+
+### Nivel 3: endurecer un contrato
+
+Parte de un contrato riesgoso y crea una versión corregida. La solución debe
+mostrar explícitamente qué hallazgos desaparecen y por qué.
+
+### Nivel 4: discusión abierta
+
+Diseña una política de equipo para aceptar o rechazar imágenes antes de
+publicarlas en un registro. Incluye al menos: tags, usuario, secretos,
+observabilidad, límites de recursos y criterios para excepciones justificadas.
 
 ## Soluciones
 
-Pendiente del issue de ejercicios del milestone `01. Docker`.
+Las soluciones ejecutables de niveles 1 a 3 viven en:
+
+- [`examples/soluciones/docker_nivel_1.rs`](../examples/soluciones/docker_nivel_1.rs)
+- [`examples/soluciones/docker_nivel_2.rs`](../examples/soluciones/docker_nivel_2.rs)
+- [`examples/soluciones/docker_nivel_3.rs`](../examples/soluciones/docker_nivel_3.rs)
+
+El nivel 4 no tiene una única respuesta correcta. La revisión debe evaluar si
+la política distingue entre riesgo técnico, riesgo operativo y excepciones con
+responsable humano.
 
 ## Referencias
 
