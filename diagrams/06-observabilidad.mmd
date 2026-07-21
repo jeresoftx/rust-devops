@@ -1,0 +1,23 @@
+flowchart LR
+    Change["Release / deployment"] --> System["Sistema en producción"]
+
+    System --> Logs["Logs estructurados"]
+    System --> Metrics["Métricas agregadas"]
+    System --> Traces["Trazas distribuidas"]
+    System --> Events["Eventos relevantes"]
+
+    Logs --> Correlation["Contexto compartido"]
+    Metrics --> Correlation
+    Traces --> Correlation
+    Events --> Correlation
+
+    Correlation --> Question["Pregunta operativa"]
+    Question --> Decision["Decisión"]
+    Decision --> Continue["Continuar"]
+    Decision --> Investigate["Investigar"]
+    Decision --> Pause["Pausar"]
+    Decision --> Rollback["Rollback"]
+    Decision --> Escalate["Escalar"]
+
+    Rollback --> Change
+    Escalate --> Owners["Responsables"]
