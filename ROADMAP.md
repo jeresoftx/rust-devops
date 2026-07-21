@@ -44,7 +44,7 @@ progresión esperada es:
 | # | Capítulo | Estado |
 |---|----------|--------|
 | 01 | Docker | benchmarked |
-| 02 | Kubernetes | planned |
+| 02 | Kubernetes | draft |
 | 03 | Pipelines de CI/CD | planned |
 | 04 | Estrategias de despliegue | planned |
 | 05 | Gestión de releases | planned |
