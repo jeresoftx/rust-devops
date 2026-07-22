@@ -49,7 +49,7 @@ progresión esperada es:
 | 04 | Estrategias de despliegue | benchmarked |
 | 05 | Gestión de releases | benchmarked |
 | 06 | Observabilidad | benchmarked |
-| 07 | Stack Grafana | planned |
+| 07 | Stack Grafana | implemented |
 | 08 | Alertas, SLOs y SLIs | planned |
 | 09 | Retención de telemetría | planned |
 | 10 | Operación en dominios regulados | planned |

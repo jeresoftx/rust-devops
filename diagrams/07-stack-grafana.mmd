@@ -1,0 +1,24 @@
+flowchart LR
+    App["Aplicación / servicio"] --> Signals["Logs, métricas y trazas"]
+
+    Signals --> Alloy["Alloy\nrecolecta, transforma y envía"]
+
+    Alloy --> Prometheus["Prometheus\nmétricas"]
+    Alloy --> Loki["Loki\nlogs"]
+    Alloy --> Tempo["Tempo\ntrazas"]
+
+    Prometheus --> Grafana["Grafana\nconsulta y visualiza"]
+    Loki --> Grafana
+    Tempo --> Grafana
+
+    Grafana --> Question["Pregunta operativa"]
+    Question --> Decision["Decisión humana"]
+
+    Decision --> Continue["Continuar"]
+    Decision --> Investigate["Investigar"]
+    Decision --> Pause["Pausar"]
+    Decision --> Rollback["Rollback"]
+
+    Signals --> Labels["Etiquetas"]
+    Labels --> Cardinality["Cardinalidad y costo"]
+    Cardinality --> Decision
