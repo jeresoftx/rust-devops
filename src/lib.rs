@@ -11,6 +11,7 @@ pub mod grafana_stack;
 pub mod kubernetes;
 pub mod observability;
 pub mod release_management;
+pub mod reliability_targets;
 
 /// Nombre público del curso dentro de Jeresoft Academy.
 pub const COURSE_NAME: &str = "DevOps";
@@ -94,7 +95,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 8,
         title: "Alertas, SLOs y SLIs",
-        status: ChapterStatus::Planned,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 9,
@@ -126,10 +127,11 @@ mod tests {
         assert_eq!(chapters[0].title, "Docker");
         assert_eq!(chapters[9].title, "Operación en dominios regulados");
         assert_eq!(chapters[6].status, ChapterStatus::Benchmarked);
+        assert_eq!(chapters[7].status, ChapterStatus::Implemented);
         assert!(
             chapters
                 .iter()
-                .skip(7)
+                .skip(8)
                 .all(|chapter| chapter.status == ChapterStatus::Planned)
         );
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);

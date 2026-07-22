@@ -15,10 +15,11 @@ fn roadmap_starts_with_operational_foundations() {
     assert_eq!(chapters[1].title, "Kubernetes");
     assert_eq!(chapters[2].title, "Pipelines de CI/CD");
     assert_eq!(chapters[6].status, ChapterStatus::Benchmarked);
+    assert_eq!(chapters[7].status, ChapterStatus::Implemented);
     assert!(
         chapters
             .iter()
-            .skip(7)
+            .skip(8)
             .all(|chapter| chapter.status == ChapterStatus::Planned)
     );
     assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
