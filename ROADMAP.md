@@ -50,7 +50,7 @@ progresión esperada es:
 | 05 | Gestión de releases | benchmarked |
 | 06 | Observabilidad | benchmarked |
 | 07 | Stack Grafana | benchmarked |
-| 08 | Alertas, SLOs y SLIs | implemented |
+| 08 | Alertas, SLOs y SLIs | benchmarked |
 | 09 | Retención de telemetría | planned |
 | 10 | Operación en dominios regulados | planned |
 
@@ -76,6 +76,5 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Completar el cierre práctico del milestone `08. Alertas, SLOs y SLIs` con
-ejercicios, soluciones y benchmark educativo antes de avanzar a retención de
-telemetría.
+Continuar con el milestone `09. Retención de telemetría`: definir concepto,
+problema, invariantes y fronteras antes de escribir el modelo Rust mínimo.

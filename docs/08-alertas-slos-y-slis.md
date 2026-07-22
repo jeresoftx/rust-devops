@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Intención
 
@@ -240,9 +240,97 @@ El modelo local no pretende simular Prometheus ni un sistema de alertas real.
 Su función es sostener la pregunta de ingeniería: ¿esta alerta representa daño
 de usuario y pide una acción razonable?
 
+## Benchmarks
+
+El benchmark educativo vive en
+[`benches/reliability_targets_baseline.rs`](../benches/reliability_targets_baseline.rs):
+
+```bash
+cargo bench --bench reliability_targets_baseline
+```
+
+Ese benchmark evalúa tres casos educativos: un SLO sano de checkout, un SLO con
+presupuesto agotado y una alerta ruidosa sin dueño ni acción. No mide
+Prometheus, Alertmanager, Grafana, red, almacenamiento, consultas reales ni
+tiempo de reacción humano.
+
+En producción, las mediciones relevantes serían:
+
+- porcentaje de éxito por operación crítica;
+- latencia por percentil, no solo promedio;
+- frescura de datos por flujo de negocio;
+- burn rate por ventana corta y larga;
+- alertas accionables frente a alertas ignoradas;
+- tiempo de detección, mitigación y recuperación;
+- presupuesto consumido por release, incidente o dependencia externa;
+- número de interrupciones humanas que terminaron en una acción útil.
+
+La regla práctica: el benchmark local solo protege el modelo educativo. La
+confiabilidad real exige señales de producción, ventanas explícitas y revisión
+humana del impacto.
+
+## Ejercicios
+
+### Nivel 1: SLO sano y alerta accionable
+
+Construye un SLO para `checkout_success_ratio` con 99,950 eventos buenos de
+100,000 totales, objetivo de 99.9% en 30 días y una alerta con dueño, acción,
+burn rate y página humana.
+
+Objetivo: explicar por qué el presupuesto de error aún existe y por qué la
+alerta sí pide una acción clara.
+
+### Nivel 2: presupuesto de error agotado
+
+Construye un SLO para `checkout_success_ratio` con 99,700 eventos buenos de
+100,000 totales y objetivo de 99.9% en 30 días. Mantén dueño y acción para que
+el hallazgo central sea el presupuesto agotado.
+
+Objetivo: distinguir entre una alerta mal diseñada y un SLO realmente
+incumplido.
+
+### Nivel 3: alerta ruidosa contra alerta accionable
+
+Parte de una alerta de latencia con burn rate rápido, pero sin dueño, sin
+acción y sin interrupción humana. Evalúa los hallazgos y luego corrige la
+política agregando responsable, acción y página humana.
+
+Objetivo: demostrar que una alerta no mejora por sonar más fuerte; mejora
+cuando conecta impacto con decisión.
+
+### Nivel 4: caso real guiado
+
+Diseña un SLO para un flujo real o plausible de Jeresoft/Softrek. Declara SLI,
+objetivo, ventana, exclusiones, dueño, acción, burn rate, dashboard de contexto
+y condición para pausar cambios.
+
+Objetivo: pasar de una métrica aislada a un contrato operativo que un equipo
+pueda defender durante una guardia.
+
+## Soluciones
+
+- Nivel 1:
+  [`examples/soluciones/reliability_targets_nivel_1.rs`](../examples/soluciones/reliability_targets_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/reliability_targets_nivel_2.rs`](../examples/soluciones/reliability_targets_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/reliability_targets_nivel_3.rs`](../examples/soluciones/reliability_targets_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al flujo elegido por
+el estudiante.
+
+## Referencias
+
+- Google SRE Book: service level objectives and alerting on SLOs.
+- Google SRE Workbook: implementing SLOs and error budgets.
+- Prometheus documentation: alerting rules and recording rules.
+- Grafana documentation: alerting, dashboards and SLO practices.
+- Observability Engineering: useful signals and operational questions.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `implemented`: tiene concepto, problema,
-alternativas, invariantes, modelo Rust, ejemplo ejecutable y diagrama. Todavía
-no está `reviewed` ni `published`. La revisión humana de Joel sigue siendo la
-frontera para aprobarlo editorialmente.
+Este capítulo queda en estado `benchmarked`: tiene concepto, problema,
+alternativas, invariantes, modelo Rust, ejemplo ejecutable, diagrama,
+ejercicios, soluciones y benchmark educativo. Todavía no está `reviewed` ni
+`published`. La revisión humana de Joel sigue siendo la frontera para aprobarlo
+editorialmente.
