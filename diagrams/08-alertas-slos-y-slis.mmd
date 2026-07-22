@@ -1,0 +1,22 @@
+flowchart LR
+    User["Experiencia de usuario"] --> SLI["SLI\nindicador medido"]
+    SLI --> SLO["SLO\nobjetivo y ventana"]
+    SLO --> Budget["Error budget\nmargen de falla"]
+
+    Budget --> Burn["Burn rate\nvelocidad de consumo"]
+    Burn --> Alert["Alerta accionable"]
+    Alert --> Owner["Responsable"]
+    Alert --> Action["Acción esperada"]
+
+    Action --> Investigate["Investigar"]
+    Action --> Pause["Pausar rollout"]
+    Action --> Rollback["Rollback"]
+    Action --> Escalate["Escalar"]
+
+    Investigate --> Budget
+    Pause --> Budget
+    Rollback --> Budget
+    Escalate --> Budget
+
+    SLI --> Dashboard["Dashboard\ncontexto de investigación"]
+    Dashboard --> Action
