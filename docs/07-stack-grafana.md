@@ -1,12 +1,12 @@
 # Stack Grafana
 
-> **Curso:** DevOps · **Capítulo:** 07 · **Prerequisitos:** Observabilidad
-> **Código:** `src/grafana_stack.rs` · **Video:** pendiente
+> **Curso:** DevOps · **Capítulo:** 07 · **Prerrequisitos:** Observabilidad
+> **Código:** [`src/grafana_stack.rs`](../src/grafana_stack.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Intención
 
@@ -127,10 +127,131 @@ SRE profundiza en objetivos de confiabilidad, error budgets y respuesta a
 incidentes. Este capítulo prepara la infraestructura conceptual para ese
 trabajo, pero no sustituye el diseño de SLOs ni el proceso humano de guardias.
 
-## Entregables del capítulo
+## Diagrama
 
-- Capítulo completo conforme a RFC-0001 §14.
-- Diagrama de flujo de señales del stack.
-- Modelo Rust mínimo de rutas de telemetría.
-- Ejemplos progresivos y pruebas.
-- Métricas de cardinalidad, volumen o justificación de no aplicabilidad.
+El diagrama principal vive en
+[`diagrams/07-stack-grafana.mmd`](../diagrams/07-stack-grafana.mmd).
+
+```mermaid
+flowchart LR
+    App["Aplicación / servicio"] --> Signals["Logs, métricas y trazas"]
+
+    Signals --> Alloy["Alloy\nrecolecta, transforma y envía"]
+
+    Alloy --> Prometheus["Prometheus\nmétricas"]
+    Alloy --> Loki["Loki\nlogs"]
+    Alloy --> Tempo["Tempo\ntrazas"]
+
+    Prometheus --> Grafana["Grafana\nconsulta y visualiza"]
+    Loki --> Grafana
+    Tempo --> Grafana
+
+    Grafana --> Question["Pregunta operativa"]
+    Question --> Decision["Decisión humana"]
+
+    Decision --> Continue["Continuar"]
+    Decision --> Investigate["Investigar"]
+    Decision --> Pause["Pausar"]
+    Decision --> Rollback["Rollback"]
+
+    Signals --> Labels["Etiquetas"]
+    Labels --> Cardinality["Cardinalidad y costo"]
+    Cardinality --> Decision
+```
+
+La ruta es deliberadamente simple: el servicio emite señales, Alloy las
+recolecta y las envía al backend correspondiente. Grafana no es el almacén de
+todo; es la interfaz donde se consultan y correlacionan las señales para tomar
+una decisión.
+
+## Cómo leer el stack
+
+El stack tiene cinco responsabilidades:
+
+1. **Emitir:** el sistema produce señales con contexto suficiente.
+2. **Recolectar:** Alloy toma señales desde procesos, contenedores o clústeres.
+3. **Almacenar:** Prometheus, Loki y Tempo conservan tipos distintos de señal.
+4. **Consultar:** Grafana permite explorar, visualizar y correlacionar.
+5. **Decidir:** una persona usa la evidencia para continuar, investigar,
+   pausar o revertir.
+
+La confusión común es pensar que Grafana "hace observabilidad". Grafana ayuda a
+consultar y visualizar, pero la observabilidad nace antes: en qué señal emite el
+servicio, con qué etiquetas, qué retención tiene, cómo se correlaciona y qué
+pregunta responde.
+
+## Implementación
+
+El código vive en [`src/grafana_stack.rs`](../src/grafana_stack.rs). El módulo
+representa:
+
+- `TelemetrySignalKind`: métrica, log o traza;
+- `GrafanaComponent`: Alloy, Prometheus, Loki, Tempo y Grafana;
+- `LabelCardinality`: cardinalidad baja, acotada o ilimitada;
+- `TelemetryLabel`: etiqueta asociada a una señal;
+- `TelemetryRoute`: ruta completa desde productor hasta visualización;
+- `GrafanaStackFinding`: hallazgos de diseño de la ruta;
+- `evaluate_route`: evaluación de coherencia del stack.
+
+La implementación no instala agentes, no ejecuta consultas PromQL o LogQL y no
+abre dashboards. Su propósito es enseñar el contrato mental: cada señal debe ir
+al backend correcto, conservar etiquetas sanas, tener retención explícita,
+mantener correlación y responder una pregunta operativa.
+
+## Ejemplo ejecutable
+
+El ejemplo vive en [`examples/grafana_stack.rs`](../examples/grafana_stack.rs):
+
+```bash
+cargo run --example grafana_stack
+```
+
+El ejemplo compara dos rutas:
+
+- una métrica de `checkout-api` recolectada por Alloy, almacenada en
+  Prometheus, visualizada en Grafana, con etiquetas acotadas, retención y
+  correlación;
+- un log de `checkout-worker` enviado por error a Prometheus, etiquetado con
+  `user_email` y sin correlación.
+
+La primera ruta pasa porque respeta la tubería esperada. La segunda falla
+porque mezcla backend incorrecto, cardinalidad ilimitada y falta de correlación.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- una ruta completa de métricas;
+- un log enviado al backend equivocado;
+- etiquetas ilimitadas y ausencia de intención;
+- el mapeo esperado entre señal y backend.
+
+Los doctests muestran cómo crear una ruta mínima y cómo evaluar una ruta
+completa.
+
+## Análisis de complejidad
+
+El modelo Rust no tiene complejidad asintótica relevante para producción. Evalúa
+una ruta con costo lineal sobre sus etiquetas: `O(n)` donde `n` es el número de
+etiquetas declaradas.
+
+En el mundo real, el costo importante no está en esa función. Está en:
+
+- cardinalidad de métricas;
+- volumen de logs;
+- porcentaje de trazas muestreadas;
+- retención por backend;
+- costo de consulta;
+- mantenimiento de dashboards;
+- tiempo humano para encontrar la señal correcta.
+
+Por eso el capítulo insiste en la pregunta operativa. Una etiqueta o un panel
+sin pregunta asociada puede parecer barato al inicio, pero termina cobrando en
+costo de almacenamiento, ruido o confusión durante incidentes.
+
+## Cierre editorial
+
+Este capítulo queda en estado `implemented`: tiene concepto, problema,
+alternativas, invariantes, modelo Rust, ejemplo ejecutable y diagrama. Todavía
+no está `reviewed` ni `published`. La revisión humana de Joel sigue siendo la
+frontera para aprobarlo editorialmente.

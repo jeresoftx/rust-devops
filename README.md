@@ -40,7 +40,7 @@ forma disciplinada de cambiar, liberar, observar y reparar.
 | 04 | Estrategias de despliegue | `src/deployment_strategies.rs` | benchmarked |
 | 05 | Gestión de releases | `src/release_management.rs` | benchmarked |
 | 06 | Observabilidad | `src/observability.rs` | benchmarked |
-| 07 | Stack Grafana | `src/grafana_stack.rs` | planned |
+| 07 | Stack Grafana | `src/grafana_stack.rs` | implemented |
 | 08 | Alertas, SLOs y SLIs | `src/reliability_targets.rs` | planned |
 | 09 | Retención de telemetría | `src/telemetry_retention.rs` | planned |
 | 10 | Operación en dominios regulados | `src/regulated_operations.rs` | planned |

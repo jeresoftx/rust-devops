@@ -98,7 +98,7 @@
       "number": 7,
       "title": "Stack Grafana",
       "slug": "stack-grafana",
-      "status": "planned",
+      "status": "implemented",
       "milestone": "07. Stack Grafana",
       "document": "docs/07-stack-grafana.md",
       "module": "src/grafana_stack.rs",
