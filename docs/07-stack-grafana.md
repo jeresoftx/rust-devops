@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Intención
 
@@ -249,9 +249,94 @@ Por eso el capítulo insiste en la pregunta operativa. Una etiqueta o un panel
 sin pregunta asociada puede parecer barato al inicio, pero termina cobrando en
 costo de almacenamiento, ruido o confusión durante incidentes.
 
+## Benchmarks
+
+El benchmark educativo vive en
+[`benches/grafana_stack_baseline.rs`](../benches/grafana_stack_baseline.rs):
+
+```bash
+cargo bench --bench grafana_stack_baseline
+```
+
+Ese benchmark evalúa tres rutas educativas: una métrica completa, un log enviado
+al backend equivocado y una métrica con etiqueta de cardinalidad ilimitada. No
+mide Prometheus, Loki, Tempo, Alloy, Grafana, red, almacenamiento ni consultas
+reales.
+
+En producción, las mediciones relevantes serían:
+
+- series activas por métrica y etiqueta;
+- volumen de logs por servicio, ambiente y versión;
+- porcentaje de trazas completas entre servicios;
+- latencia de ingestión por backend;
+- tiempo de consulta durante incidentes;
+- costo de retención por señal;
+- cantidad de dashboards con dueño y pregunta explícita;
+- alertas accionables frente a alertas ignoradas.
+
+La regla práctica: el benchmark local solo protege el modelo educativo. Las
+decisiones de operación requieren métricas reales del stack desplegado.
+
+## Ejercicios
+
+### Nivel 1: ruta sana de métricas
+
+Construye una ruta para una métrica de `checkout-api` que permita responder si
+la versión nueva está sana. Debe usar Alloy, Prometheus, Grafana, etiquetas de
+baja cardinalidad, retención, correlación y una pregunta explícita.
+
+Objetivo: explicar por qué la ruta respeta las responsabilidades del stack.
+
+### Nivel 2: backend equivocado
+
+Construye una ruta de logs que por error se almacena en Prometheus. Mantén el
+resto de la ruta razonable para que el hallazgo central sea el backend
+incorrecto.
+
+Objetivo: distinguir el tipo de señal del backend que debe conservarla.
+
+### Nivel 3: cardinalidad ilimitada
+
+Parte de una métrica etiquetada con `user_email`. Evalúa el riesgo y luego
+rediseña la ruta con etiquetas acotadas como `service`, `environment` y
+`version`.
+
+Objetivo: explicar cómo una etiqueta aparentemente útil puede volver caro o
+inestable el sistema de observabilidad.
+
+### Nivel 4: caso real guiado
+
+Diseña una ruta de Stack Grafana para un servicio real o plausible de
+Jeresoft/Softrek. Declara productor, tipo de señal, recolector, backend,
+etiquetas, retención, correlación, pregunta y acción humana esperada.
+
+Objetivo: evitar dashboards genéricos y construir evidencia para una decisión
+operativa concreta.
+
+## Soluciones
+
+- Nivel 1:
+  [`examples/soluciones/grafana_stack_nivel_1.rs`](../examples/soluciones/grafana_stack_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/grafana_stack_nivel_2.rs`](../examples/soluciones/grafana_stack_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/grafana_stack_nivel_3.rs`](../examples/soluciones/grafana_stack_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse al servicio elegido
+por el estudiante.
+
+## Referencias
+
+- Grafana documentation: Grafana, Loki, Tempo and Alloy.
+- Prometheus documentation: data model, labels and cardinality.
+- OpenTelemetry documentation: metrics, logs and traces.
+- Google SRE Book: practical alerting and monitoring.
+- Observability Engineering: designing useful operational questions.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `implemented`: tiene concepto, problema,
-alternativas, invariantes, modelo Rust, ejemplo ejecutable y diagrama. Todavía
-no está `reviewed` ni `published`. La revisión humana de Joel sigue siendo la
-frontera para aprobarlo editorialmente.
+Este capítulo queda en estado `benchmarked`: tiene concepto, problema,
+alternativas, invariantes, modelo Rust, ejemplo ejecutable, diagrama,
+ejercicios, soluciones y benchmark educativo. Todavía no está `reviewed` ni
+`published`. La revisión humana de Joel sigue siendo la frontera para aprobarlo
+editorialmente.

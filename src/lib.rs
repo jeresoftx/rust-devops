@@ -89,7 +89,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 7,
         title: "Stack Grafana",
-        status: ChapterStatus::Implemented,
+        status: ChapterStatus::Benchmarked,
     },
     Chapter {
         number: 8,
@@ -125,7 +125,7 @@ mod tests {
         assert_eq!(chapters.len(), 10);
         assert_eq!(chapters[0].title, "Docker");
         assert_eq!(chapters[9].title, "Operación en dominios regulados");
-        assert_eq!(chapters[6].status, ChapterStatus::Implemented);
+        assert_eq!(chapters[6].status, ChapterStatus::Benchmarked);
         assert!(
             chapters
                 .iter()
