@@ -7,6 +7,7 @@
 pub mod cicd;
 pub mod deployment_strategies;
 pub mod docker;
+pub mod grafana_stack;
 pub mod kubernetes;
 pub mod observability;
 pub mod release_management;
@@ -88,7 +89,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 7,
         title: "Stack Grafana",
-        status: ChapterStatus::Planned,
+        status: ChapterStatus::Implemented,
     },
     Chapter {
         number: 8,
@@ -124,10 +125,11 @@ mod tests {
         assert_eq!(chapters.len(), 10);
         assert_eq!(chapters[0].title, "Docker");
         assert_eq!(chapters[9].title, "Operación en dominios regulados");
+        assert_eq!(chapters[6].status, ChapterStatus::Implemented);
         assert!(
             chapters
                 .iter()
-                .skip(6)
+                .skip(7)
                 .all(|chapter| chapter.status == ChapterStatus::Planned)
         );
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
