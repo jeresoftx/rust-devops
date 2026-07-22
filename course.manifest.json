@@ -112,7 +112,7 @@
       "number": 8,
       "title": "Alertas, SLOs y SLIs",
       "slug": "alertas-slos-y-slis",
-      "status": "implemented",
+      "status": "benchmarked",
       "milestone": "08. Alertas, SLOs y SLIs",
       "document": "docs/08-alertas-slos-y-slis.md",
       "module": "src/reliability_targets.rs",

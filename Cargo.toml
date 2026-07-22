@@ -95,6 +95,18 @@ path = "examples/soluciones/grafana_stack_nivel_2.rs"
 name = "grafana_stack_nivel_3"
 path = "examples/soluciones/grafana_stack_nivel_3.rs"
 
+[[example]]
+name = "reliability_targets_nivel_1"
+path = "examples/soluciones/reliability_targets_nivel_1.rs"
+
+[[example]]
+name = "reliability_targets_nivel_2"
+path = "examples/soluciones/reliability_targets_nivel_2.rs"
+
+[[example]]
+name = "reliability_targets_nivel_3"
+path = "examples/soluciones/reliability_targets_nivel_3.rs"
+
 [[bench]]
 name = "docker_baseline"
 path = "benches/docker_baseline.rs"
@@ -128,4 +140,9 @@ harness = false
 [[bench]]
 name = "grafana_stack_baseline"
 path = "benches/grafana_stack_baseline.rs"
+harness = false
+
+[[bench]]
+name = "reliability_targets_baseline"
+path = "benches/reliability_targets_baseline.rs"
 harness = false
