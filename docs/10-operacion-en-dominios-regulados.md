@@ -139,6 +139,62 @@ ambientes, secretos, evidencias y respuesta.
 - Ejemplos progresivos y pruebas.
 - Benchmarks, métricas o justificación explícita de no aplicabilidad.
 
+## Diagrama
+
+El diagrama principal vive en
+[`diagrams/10-operacion-en-dominios-regulados.mmd`](../diagrams/10-operacion-en-dominios-regulados.mmd).
+
+```mermaid
+flowchart LR
+    Actor["Actor humano o sistema"] --> Action["Acción operativa"]
+    Action --> Auth["Autorización"]
+    Action --> Env["Ambiente"]
+    Action --> Resource["Recurso"]
+    Action --> Data["Clasificación de datos"]
+
+    Auth --> Event["Evento auditable"]
+    Env --> Event
+    Resource --> Event
+    Data --> Event
+
+    Event --> Correlation["Correlación\ncambio / incidente"]
+    Event --> Evidence["Evidencia"]
+    Event --> Retention["Retención"]
+    Event --> Privacy["Minimización / redacción"]
+    Event --> Review["Revisión posterior"]
+
+    Correlation --> Audit["Auditoría e investigación"]
+    Evidence --> Audit
+    Retention --> Audit
+    Privacy --> Audit
+    Review --> Audit
+```
+
+La ruta empieza con una acción operativa. Para que esa acción sea defendible,
+necesita autorización, ambiente, recurso y clasificación de datos. Todo eso se
+concentra en un evento auditable que luego alimenta investigación, auditoría y
+revisión posterior.
+
+## Cómo leer un evento auditable
+
+Un evento auditable útil responde:
+
+- quién actuó;
+- qué hizo;
+- sobre qué recurso;
+- en qué ambiente;
+- con qué autorización;
+- qué datos pudo afectar;
+- con qué cambio o incidente se correlaciona;
+- dónde vive la evidencia;
+- cuánto tiempo se conserva;
+- qué datos se minimizan o redactan.
+
+Un log que solo dice "deploy ok" no alcanza. En un dominio regulado, el evento
+debe conectar acción y responsabilidad. La operación no se vuelve más seria por
+tener más texto; se vuelve más seria cuando la evidencia permite reconstruir una
+decisión sin exponer información innecesaria.
+
 ## Implementación
 
 El código vive en
@@ -158,6 +214,25 @@ La implementación no pretende modelar leyes específicas. Primero enseña el
 contrato operativo: cada acción sensible debe tener identidad, autorización,
 alcance, evidencia y límites explícitos.
 
+## Ejemplo ejecutable
+
+El ejemplo vive en
+[`examples/regulated_operations.rs`](../examples/regulated_operations.rs):
+
+```bash
+cargo run --example regulated_operations
+```
+
+El ejemplo compara:
+
+- un despliegue productivo con aprobación humana, correlación, evidencia,
+  minimización de datos y retención;
+- una rotación de secreto durante emergencia sin revisión posterior.
+
+La segunda operación puede ser necesaria durante un incidente, pero no queda
+auditada correctamente hasta exigir revisión posterior. La emergencia justifica
+velocidad, no ausencia de evidencia.
+
 ## Pruebas
 
 Las pruebas unitarias cubren:
@@ -167,10 +242,34 @@ Las pruebas unitarias cubren:
 - emergencia sin revisión posterior;
 - datos regulados sin minimización ni retención.
 
+Los doctests muestran cómo crear un evento mínimo y cómo evaluar una operación
+productiva auditable.
+
+## Análisis de complejidad
+
+El modelo educativo evalúa un evento con costo constante: `O(1)`. Revisa campos
+de identidad, autorización, ambiente, evidencia, sensibilidad y retención sin
+recorrer colecciones.
+
+En producción, el costo real está en:
+
+- volumen de eventos auditables;
+- cardinalidad de actores, recursos y ambientes;
+- almacenamiento de evidencia;
+- búsqueda por correlación durante auditorías;
+- retención por obligaciones del dominio;
+- redacción o tokenización de datos sensibles;
+- tiempo humano de revisión posterior;
+- integración con IAM, pipelines, incidentes y registros de cambio.
+
+Por eso el módulo Rust no pretende ser un SIEM ni un motor de cumplimiento. Su
+función es preservar la pregunta central: ¿esta acción puede explicarse después
+con evidencia suficiente y exposición mínima?
+
 ## Cierre editorial
 
 Este capítulo queda en estado `implemented`: define intención, problema,
 concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
-pruebas. Todavía no tiene ejemplo ejecutable, diagrama, ejercicios ni benchmark.
-Tampoco está `reviewed` ni `published`; la revisión humana de Joel sigue siendo
-la frontera editorial.
+pruebas, ejemplo ejecutable, diagrama y análisis de complejidad. Todavía no
+tiene ejercicios, soluciones ni benchmark educativo. Tampoco está `reviewed` ni
+`published`; la revisión humana de Joel sigue siendo la frontera editorial.
