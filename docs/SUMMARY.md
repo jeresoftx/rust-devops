@@ -17,3 +17,7 @@
 - [08. Alertas, SLOs y SLIs](08-alertas-slos-y-slis.md)
 - [09. Retención de telemetría](09-retencion-de-telemetria.md)
 - [10. Operación en dominios regulados](10-operacion-en-dominios-regulados.md)
+
+# Cierre editorial
+
+- [Publicación candidata](11-publicacion-candidata.md)
