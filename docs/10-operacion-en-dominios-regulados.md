@@ -1,12 +1,12 @@
 # Operación en dominios regulados
 
 > **Curso:** DevOps · **Capítulo:** 10 · **Prerrequisitos:** Observabilidad, releases y retención
-> **Código:** `src/regulated_operations.rs` · **Video:** pendiente
+> **Código:** [`src/regulated_operations.rs`](../src/regulated_operations.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Intención
 
@@ -139,9 +139,38 @@ ambientes, secretos, evidencias y respuesta.
 - Ejemplos progresivos y pruebas.
 - Benchmarks, métricas o justificación explícita de no aplicabilidad.
 
+## Implementación
+
+El código vive en
+[`src/regulated_operations.rs`](../src/regulated_operations.rs). El módulo
+representa:
+
+- `Environment`: desarrollo, pruebas, staging o producción;
+- `DataClassification`: datos públicos, internos, sensibles o regulados;
+- `AuthorizationKind`: aprobación humana, automatización, emergencia o
+  excepción temporal;
+- `RegulatedOperationEvent`: evento auditable;
+- `RegulatedOperationFinding`: hallazgos operativos;
+- `evaluate_regulated_operation`: evaluación de evidencia, autorización,
+  ambiente y privacidad.
+
+La implementación no pretende modelar leyes específicas. Primero enseña el
+contrato operativo: cada acción sensible debe tener identidad, autorización,
+alcance, evidencia y límites explícitos.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- evento productivo con autorización, correlación, evidencia y redacción;
+- cambio productivo sin autorización explícita;
+- emergencia sin revisión posterior;
+- datos regulados sin minimización ni retención.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `draft`: define intención, problema, concepto,
-alternativas, tradeoffs, invariantes y fronteras. Todavía no tiene modelo Rust,
-ejemplo ejecutable, diagrama, ejercicios ni benchmark. Tampoco está `reviewed`
-ni `published`; la revisión humana de Joel sigue siendo la frontera editorial.
+Este capítulo queda en estado `implemented`: define intención, problema,
+concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
+pruebas. Todavía no tiene ejemplo ejecutable, diagrama, ejercicios ni benchmark.
+Tampoco está `reviewed` ni `published`; la revisión humana de Joel sigue siendo
+la frontera editorial.
