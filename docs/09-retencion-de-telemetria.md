@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Intención
 
@@ -259,10 +259,97 @@ Por eso el capítulo separa modelo local de plataforma real. La función Rust
 protege el contrato educativo; la operación real exige medir volumen, costo y
 uso en el sistema desplegado.
 
+## Benchmarks
+
+El benchmark educativo vive en
+[`benches/telemetry_retention_baseline.rs`](../benches/telemetry_retention_baseline.rs):
+
+```bash
+cargo bench --bench telemetry_retention_baseline
+```
+
+Ese benchmark evalúa tres políticas educativas: una métrica sana con retención
+anual, logs sensibles sin redacción y datos regulados sin archivo cold. No mide
+compresión, red, latencia de consulta, facturas de proveedor, recuperación
+desde archivo ni costos reales de cumplimiento.
+
+En producción, las mediciones relevantes serían:
+
+- GiB ingeridos por señal, servicio y ambiente;
+- costo por nivel hot, warm y cold;
+- latencia de consulta por nivel;
+- tasa de compresión por tipo de dato;
+- porcentaje de consultas por antigüedad;
+- tiempo de recuperación desde cold;
+- volumen eliminado por políticas de vida útil;
+- hallazgos de privacidad o auditoría relacionados con telemetría.
+
+La regla práctica: el benchmark local solo protege el modelo educativo. Una
+política real necesita datos de uso, costos del proveedor y obligaciones del
+dominio.
+
+## Ejercicios
+
+### Nivel 1: métrica con tendencia anual
+
+Construye una política para `checkout_metrics` con propósito de análisis de
+tendencia, dueño de observabilidad, 14 días hot, 46 warm, 305 cold, 1.5 GiB por
+día y revisión cada 90 días.
+
+Objetivo: explicar por qué una métrica agregada puede vivir más tiempo que una
+traza completa sin implicar el mismo riesgo.
+
+### Nivel 2: logs sensibles sin redacción
+
+Construye una política para `checkout_logs` con sensibilidad `Sensitive`, 7 días
+hot, 23 warm, 0 cold, 8 GiB por día y revisión cada 30 días. Evalúa el hallazgo
+y luego corrige la política agregando redacción de campos sensibles.
+
+Objetivo: distinguir retención operativa de acumulación riesgosa de datos.
+
+### Nivel 3: datos regulados sin archivo cold
+
+Construye una política para `audit_logs` con sensibilidad `Regulated`, propósito
+de cumplimiento, 14 días hot, 76 warm y 0 cold. Evalúa el hallazgo y luego
+agrega archivo cold hasta completar un año de retención.
+
+Objetivo: explicar por qué cumplimiento no significa guardar todo en hot, sino
+conservar evidencia con controles, costo y recuperación explícitos.
+
+### Nivel 4: caso real guiado
+
+Diseña una política de retención para una señal real o plausible de
+Jeresoft/Softrek. Declara tipo de señal, sensibilidad, propósito, dueño,
+retención hot/warm/cold, volumen diario, redacción, revisión y criterio de
+eliminación.
+
+Objetivo: convertir una decisión de almacenamiento en una política operable y
+defendible.
+
+## Soluciones
+
+- Nivel 1:
+  [`examples/soluciones/telemetry_retention_nivel_1.rs`](../examples/soluciones/telemetry_retention_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/telemetry_retention_nivel_2.rs`](../examples/soluciones/telemetry_retention_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/telemetry_retention_nivel_3.rs`](../examples/soluciones/telemetry_retention_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse a la señal elegida
+por el estudiante.
+
+## Referencias
+
+- Grafana documentation: retention, storage and cost management.
+- Prometheus documentation: storage, retention and compaction.
+- Loki documentation: retention and log lifecycle.
+- OpenTelemetry documentation: metrics, logs, traces and sampling.
+- Google SRE Book: monitoring distributed systems.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `implemented`: define intención, problema,
+Este capítulo queda en estado `benchmarked`: define intención, problema,
 concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo,
-pruebas, ejemplo ejecutable, diagrama y análisis de complejidad. Todavía no
-tiene ejercicios, soluciones ni benchmark educativo. Tampoco está `reviewed` ni
-`published`; la revisión humana de Joel sigue siendo la frontera editorial.
+pruebas, ejemplo ejecutable, diagrama, análisis de complejidad, ejercicios,
+soluciones y benchmark educativo. Todavía no está `reviewed` ni `published`; la
+revisión humana de Joel sigue siendo la frontera editorial.

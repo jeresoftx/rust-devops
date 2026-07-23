@@ -126,7 +126,7 @@
       "number": 9,
       "title": "Retención de telemetría",
       "slug": "retencion-de-telemetria",
-      "status": "implemented",
+      "status": "benchmarked",
       "milestone": "09. Retención de telemetría",
       "document": "docs/09-retencion-de-telemetria.md",
       "module": "src/telemetry_retention.rs",
