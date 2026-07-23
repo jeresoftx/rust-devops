@@ -4,7 +4,7 @@
     "title": "DevOps",
     "semester": null,
     "repository": "https://github.com/jeresoftx/rust-devops",
-    "status": "planned",
+    "status": "benchmarked",
     "language": "rust",
     "area": "devops"
   },
@@ -19,7 +19,7 @@
       "document": "docs/01-docker.md",
       "module": "src/docker.rs",
       "example": "examples/docker.rs",
-      "tests": "tests/docker.rs",
+      "tests": "src/docker.rs",
       "bench": "benches/docker_baseline.rs",
       "diagram": "diagrams/01-docker.mmd"
     },
@@ -33,7 +33,7 @@
       "document": "docs/02-kubernetes.md",
       "module": "src/kubernetes.rs",
       "example": "examples/kubernetes.rs",
-      "tests": "tests/kubernetes.rs",
+      "tests": "src/kubernetes.rs",
       "bench": "benches/kubernetes_baseline.rs",
       "diagram": "diagrams/02-kubernetes.mmd"
     },
@@ -47,7 +47,7 @@
       "document": "docs/03-pipelines-de-cicd.md",
       "module": "src/cicd.rs",
       "example": "examples/cicd.rs",
-      "tests": "tests/cicd.rs",
+      "tests": "src/cicd.rs",
       "bench": "benches/cicd_baseline.rs",
       "diagram": "diagrams/03-pipelines-de-cicd.mmd"
     },
@@ -61,7 +61,7 @@
       "document": "docs/04-estrategias-de-despliegue.md",
       "module": "src/deployment_strategies.rs",
       "example": "examples/deployment_strategies.rs",
-      "tests": "tests/deployment_strategies.rs",
+      "tests": "src/deployment_strategies.rs",
       "bench": "benches/deployment_strategies_baseline.rs",
       "diagram": "diagrams/04-estrategias-de-despliegue.mmd"
     },
@@ -75,7 +75,7 @@
       "document": "docs/05-gestion-de-releases.md",
       "module": "src/release_management.rs",
       "example": "examples/release_management.rs",
-      "tests": "tests/release_management.rs",
+      "tests": "src/release_management.rs",
       "bench": "benches/release_management_baseline.rs",
       "diagram": "diagrams/05-gestion-de-releases.mmd"
     },
@@ -89,7 +89,7 @@
       "document": "docs/06-observabilidad.md",
       "module": "src/observability.rs",
       "example": "examples/observability.rs",
-      "tests": "tests/observability.rs",
+      "tests": "src/observability.rs",
       "bench": "benches/observability_baseline.rs",
       "diagram": "diagrams/06-observabilidad.mmd"
     },
@@ -103,7 +103,7 @@
       "document": "docs/07-stack-grafana.md",
       "module": "src/grafana_stack.rs",
       "example": "examples/grafana_stack.rs",
-      "tests": "tests/grafana_stack.rs",
+      "tests": "src/grafana_stack.rs",
       "bench": "benches/grafana_stack_baseline.rs",
       "diagram": "diagrams/07-stack-grafana.mmd"
     },
@@ -117,7 +117,7 @@
       "document": "docs/08-alertas-slos-y-slis.md",
       "module": "src/reliability_targets.rs",
       "example": "examples/reliability_targets.rs",
-      "tests": "tests/reliability_targets.rs",
+      "tests": "src/reliability_targets.rs",
       "bench": "benches/reliability_targets_baseline.rs",
       "diagram": "diagrams/08-alertas-slos-y-slis.mmd"
     },
@@ -131,7 +131,7 @@
       "document": "docs/09-retencion-de-telemetria.md",
       "module": "src/telemetry_retention.rs",
       "example": "examples/telemetry_retention.rs",
-      "tests": "tests/telemetry_retention.rs",
+      "tests": "src/telemetry_retention.rs",
       "bench": "benches/telemetry_retention_baseline.rs",
       "diagram": "diagrams/09-retencion-de-telemetria.mmd"
     },
@@ -145,7 +145,7 @@
       "document": "docs/10-operacion-en-dominios-regulados.md",
       "module": "src/regulated_operations.rs",
       "example": "examples/regulated_operations.rs",
-      "tests": "tests/regulated_operations.rs",
+      "tests": "src/regulated_operations.rs",
       "bench": "benches/regulated_operations_baseline.rs",
       "diagram": "diagrams/10-operacion-en-dominios-regulados.mmd"
     }

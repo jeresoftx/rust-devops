@@ -8,9 +8,9 @@ orienta el avance, pero no convierte el curso en una carrera por terminar.
 
 ## Estado actual
 
-El repositorio acaba de entrar en desarrollo. La estructura inicial declara la
-frontera del curso, el mapa de capítulos, el contrato para `academy-web`, las
-licencias, el crate Rust mínimo y el flujo de trabajo con GitHub.
+El curso tiene sus 10 capítulos en estado `benchmarked`: cada capítulo declara
+concepto, problema, alternativas, invariantes, modelo Rust, ejemplo ejecutable,
+pruebas, soluciones de niveles 1 a 3 y benchmark educativo.
 
 El plan de trabajo vive en GitHub como milestones, issues, labels y un GitHub
 Project asociado al repositorio. Cada paso accionable queda asignado a
@@ -39,7 +39,7 @@ progresión esperada es:
 5. **Observar:** logs, métricas y trazas como lectura del sistema vivo.
 6. **Responder:** alertas, SLOs, retención y operación en dominios regulados.
 
-## Capítulos planeados
+## Capítulos
 
 | # | Capítulo | Estado |
 |---|----------|--------|
@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Continuar el milestone `11. Cierre editorial y publicación`: verificar que
-README, ROADMAP y `course.manifest.json` reflejen exactamente el avance real
-del curso antes de cualquier revisión humana o publicación.
+Continuar el milestone `11. Cierre editorial y publicación`: ejecutar la suite
+completa, documentar el resultado de publicación candidata y dejar el repo listo
+para revisión humana sin marcar capítulos como `reviewed` ni `published`.

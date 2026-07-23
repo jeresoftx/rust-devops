@@ -30,7 +30,14 @@ Alimenta `rust-ai-engineering`, `rust-travel`, dominios aplicados y cursos
 como `software-engineering-handbook`, porque todo sistema serio necesita una
 forma disciplinada de cambiar, liberar, observar y reparar.
 
-## Capítulos planeados
+## Estado del curso
+
+El curso está en estado `benchmarked`: los 10 capítulos tienen capítulo
+educativo, modelo Rust, ejemplo ejecutable, pruebas, soluciones de niveles 1 a
+3 y benchmark educativo. Todavía no está `reviewed` ni `published`; la revisión
+humana de Joel sigue siendo obligatoria.
+
+## Capítulos
 
 | # | Capítulo | Módulo sugerido | Estado |
 |---|----------|-----------------|--------|
@@ -88,7 +95,8 @@ cargo test --doc
 
 - `AGENTS.md` es la guía de arranque para humanos e IA en este repositorio.
 - `course.manifest.json` expone el mapa estructurado del curso para
-  `academy-web`.
+  `academy-web`, con rutas existentes para documentos, módulos, ejemplos,
+  pruebas, benchmarks y diagramas.
 - `docs/SUMMARY.md` contiene la navegación mdBook del curso, agrupada por
   fundamentos operativos y confiabilidad/cumplimiento.
 - Cada capítulo enlaza el capítulo anterior y siguiente para sostener lectura
