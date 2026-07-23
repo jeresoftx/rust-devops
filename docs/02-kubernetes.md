@@ -1,6 +1,6 @@
 # Kubernetes
 
-> **Curso:** DevOps · **Capítulo:** 02 · **Prerequisitos:** Docker
+> **Curso:** DevOps · **Capítulo:** 02 · **Prerrequisitos:** Docker
 > **Código:** [`src/kubernetes.rs`](../src/kubernetes.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
@@ -243,3 +243,8 @@ servicio elegido por el estudiante.
 - Kubernetes documentation: Services, Load Balancing, and Networking.
 - Kubernetes documentation: Configure Liveness, Readiness and Startup Probes.
 - Google SRE Workbook: prácticas de rollout, observabilidad y respuesta.
+
+---
+
+[Anterior: 01. Docker](01-docker.md) ·
+[Siguiente: 03. Pipelines de CI/CD](03-pipelines-de-cicd.md)

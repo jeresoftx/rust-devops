@@ -36,3 +36,25 @@ SRE aparece dentro del curso donde ayuda a medir confiabilidad: SLOs, SLIs,
 error budgets, alertas útiles y respuesta a incidentes. El foco del repo sigue
 siendo el ciclo operativo completo: del cambio al despliegue, del despliegue a
 la observación, y de la observación a la reparación.
+
+## Navegación del curso
+
+El curso se recorre como una secuencia operativa, no como una lista suelta de
+herramientas:
+
+1. **Fundamentos operativos:** Docker, Kubernetes, CI/CD, despliegues,
+   releases y observabilidad.
+2. **Confiabilidad y cumplimiento:** stack Grafana, alertas, SLOs, retención y
+   operación en dominios regulados.
+
+Cada capítulo declara su estado editorial, enlaza su modelo Rust, ejemplo,
+diagrama, benchmark y soluciones cuando existen. Los enlaces de anterior y
+siguiente al final de cada archivo ayudan a leer el material como libro y a
+mantener `docs/SUMMARY.md` sincronizado con el flujo real.
+
+Este material está preparado para revisión humana, pero ningún capítulo está
+marcado como `reviewed` ni `published`.
+
+---
+
+[Siguiente: 01. Docker](01-docker.md)

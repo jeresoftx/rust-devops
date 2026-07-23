@@ -89,7 +89,10 @@ cargo test --doc
 - `AGENTS.md` es la guía de arranque para humanos e IA en este repositorio.
 - `course.manifest.json` expone el mapa estructurado del curso para
   `academy-web`.
-- `docs/SUMMARY.md` contiene la navegación inicial del curso.
+- `docs/SUMMARY.md` contiene la navegación mdBook del curso, agrupada por
+  fundamentos operativos y confiabilidad/cumplimiento.
+- Cada capítulo enlaza el capítulo anterior y siguiente para sostener lectura
+  lineal y revisión editorial.
 - `docs/00-introduccion.md` define la frontera conceptual de DevOps frente a
   Cloud, arquitectura y SRE.
 - `ROADMAP.md` registra el avance del curso sin convertirlo en una fecha

@@ -1,6 +1,6 @@
 # Docker
 
-> **Curso:** DevOps · **Capítulo:** 01 · **Prerequisitos:** fundamentos de línea de comandos y procesos
+> **Curso:** DevOps · **Capítulo:** 01 · **Prerrequisitos:** fundamentos de línea de comandos y procesos
 > **Código:** [`src/docker.rs`](../src/docker.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
@@ -226,3 +226,8 @@ responsable humano.
 - Docker documentation: Dockerfile reference.
 - Linux manual pages: namespaces and cgroups.
 - Google SRE Workbook: prácticas de confiabilidad y señales operativas.
+
+---
+
+[Anterior: Introducción](00-introduccion.md) ·
+[Siguiente: 02. Kubernetes](02-kubernetes.md)

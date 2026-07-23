@@ -334,3 +334,8 @@ alternativas, invariantes, modelo Rust, ejemplo ejecutable, diagrama,
 ejercicios, soluciones y benchmark educativo. Todavía no está `reviewed` ni
 `published`. La revisión humana de Joel sigue siendo la frontera para aprobarlo
 editorialmente.
+
+---
+
+[Anterior: 07. Stack Grafana](07-stack-grafana.md) ·
+[Siguiente: 09. Retención de telemetría](09-retencion-de-telemetria.md)

@@ -359,3 +359,7 @@ concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
 pruebas, ejemplo ejecutable, diagrama, análisis de complejidad, ejercicios,
 soluciones y benchmark educativo. Todavía no está `reviewed` ni `published`; la
 revisión humana de Joel sigue siendo la frontera editorial.
+
+---
+
+[Anterior: 09. Retención de telemetría](09-retencion-de-telemetria.md)
