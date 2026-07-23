@@ -107,7 +107,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 10,
         title: "Operación en dominios regulados",
-        status: ChapterStatus::Implemented,
+        status: ChapterStatus::Benchmarked,
     },
 ];
 
@@ -131,7 +131,7 @@ mod tests {
         assert_eq!(chapters[6].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[7].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[8].status, ChapterStatus::Benchmarked);
-        assert_eq!(chapters[9].status, ChapterStatus::Implemented);
+        assert_eq!(chapters[9].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);

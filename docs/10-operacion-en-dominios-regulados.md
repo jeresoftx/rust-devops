@@ -6,7 +6,7 @@
 
 ## Estado
 
-`implemented`
+`benchmarked`
 
 ## Intención
 
@@ -266,10 +266,96 @@ Por eso el módulo Rust no pretende ser un SIEM ni un motor de cumplimiento. Su
 función es preservar la pregunta central: ¿esta acción puede explicarse después
 con evidencia suficiente y exposición mínima?
 
+## Benchmarks
+
+El benchmark educativo vive en
+[`benches/regulated_operations_baseline.rs`](../benches/regulated_operations_baseline.rs):
+
+```bash
+cargo bench --bench regulated_operations_baseline
+```
+
+Ese benchmark evalúa tres eventos educativos: un despliegue productivo
+auditable, un despliegue productivo sin autorización y una emergencia sin
+revisión posterior. No mide almacenamiento real, SIEM, IAM, latencia de
+búsqueda, firma criptográfica, redacción automática ni procesos humanos.
+
+En producción, las mediciones relevantes serían:
+
+- eventos auditables por servicio, ambiente y actor;
+- cambios productivos con autorización verificable;
+- excepciones abiertas y tiempo hasta revisión posterior;
+- eventos con datos sensibles minimizados o redactados;
+- tiempo para reconstruir una acción durante auditoría;
+- evidencia sin correlación con cambio o incidente;
+- secretos rotados por emergencia;
+- hallazgos repetidos por pipeline, equipo o ambiente.
+
+La regla práctica: el benchmark local solo protege el contrato educativo. La
+operación regulada real requiere evidencia persistente, controles de acceso,
+retención, revisión humana y trazabilidad entre sistemas.
+
+## Ejercicios
+
+### Nivel 1: despliegue productivo auditable
+
+Construye un evento para desplegar `payments-api` en producción con aprobación
+humana, clasificación sensible, correlación con cambio, evidencia, minimización
+de datos y retención de 365 días.
+
+Objetivo: explicar por qué el evento puede responder quién, qué, dónde, con qué
+autorización y con qué evidencia.
+
+### Nivel 2: producción sin autorización
+
+Construye un despliegue productivo con correlación, evidencia y retención, pero
+sin autorización. Evalúa el hallazgo y luego corrige el evento con una
+automatización aprobada.
+
+Objetivo: distinguir una acción técnicamente exitosa de una acción defendible.
+
+### Nivel 3: emergencia con revisión posterior
+
+Construye una rotación de secreto durante emergencia con evidencia, correlación
+y retención, pero sin revisión posterior. Evalúa el hallazgo y luego corrige el
+evento exigiendo revisión posterior.
+
+Objetivo: entender que la emergencia puede justificar velocidad, pero no borra
+la responsabilidad de explicar la acción después.
+
+### Nivel 4: caso real guiado
+
+Diseña un evento auditable para una operación real o plausible de
+Jeresoft/Softrek. Declara actor, acción, recurso, ambiente, clasificación,
+autorización, correlación, evidencia, minimización, retención y revisión.
+
+Objetivo: convertir un cambio operativo en evidencia útil para auditoría e
+investigación sin exponer más datos de los necesarios.
+
+## Soluciones
+
+- Nivel 1:
+  [`examples/soluciones/regulated_operations_nivel_1.rs`](../examples/soluciones/regulated_operations_nivel_1.rs)
+- Nivel 2:
+  [`examples/soluciones/regulated_operations_nivel_2.rs`](../examples/soluciones/regulated_operations_nivel_2.rs)
+- Nivel 3:
+  [`examples/soluciones/regulated_operations_nivel_3.rs`](../examples/soluciones/regulated_operations_nivel_3.rs)
+
+El nivel 4 queda sin solución cerrada porque debe adaptarse a la operación
+elegida por el estudiante.
+
+## Referencias
+
+- Google SRE Book: managing incidents and postmortems.
+- NIST Cybersecurity Framework: identify, protect, detect, respond and recover.
+- OWASP: logging, monitoring and secrets management practices.
+- OpenTelemetry documentation: traces, logs and context propagation.
+- Grafana documentation: audit logs and operational evidence.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `implemented`: define intención, problema,
+Este capítulo queda en estado `benchmarked`: define intención, problema,
 concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
-pruebas, ejemplo ejecutable, diagrama y análisis de complejidad. Todavía no
-tiene ejercicios, soluciones ni benchmark educativo. Tampoco está `reviewed` ni
-`published`; la revisión humana de Joel sigue siendo la frontera editorial.
+pruebas, ejemplo ejecutable, diagrama, análisis de complejidad, ejercicios,
+soluciones y benchmark educativo. Todavía no está `reviewed` ni `published`; la
+revisión humana de Joel sigue siendo la frontera editorial.
