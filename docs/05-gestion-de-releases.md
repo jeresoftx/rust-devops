@@ -316,3 +316,8 @@ por el estudiante.
 - Google SRE Workbook: release engineering.
 - Kubernetes documentation: Deployments and rollbacks.
 - GitHub Docs: Releases and tags.
+
+---
+
+[Anterior: 04. Estrategias de despliegue](04-estrategias-de-despliegue.md) ·
+[Siguiente: 06. Observabilidad](06-observabilidad.md)

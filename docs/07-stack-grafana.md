@@ -340,3 +340,8 @@ alternativas, invariantes, modelo Rust, ejemplo ejecutable, diagrama,
 ejercicios, soluciones y benchmark educativo. Todavía no está `reviewed` ni
 `published`. La revisión humana de Joel sigue siendo la frontera para aprobarlo
 editorialmente.
+
+---
+
+[Anterior: 06. Observabilidad](06-observabilidad.md) ·
+[Siguiente: 08. Alertas, SLOs y SLIs](08-alertas-slos-y-slis.md)

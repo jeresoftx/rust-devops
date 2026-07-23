@@ -309,3 +309,8 @@ por el estudiante.
 - Google SRE Book: monitoring distributed systems.
 - Prometheus documentation: metric types and labels.
 - Grafana documentation: dashboards and alerting.
+
+---
+
+[Anterior: 05. Gestión de releases](05-gestion-de-releases.md) ·
+[Siguiente: 07. Stack Grafana](07-stack-grafana.md)

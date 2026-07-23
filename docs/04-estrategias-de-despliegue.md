@@ -1,6 +1,6 @@
 # Estrategias de Despliegue
 
-> **Curso:** DevOps · **Capítulo:** 04 · **Prerequisitos:** Pipelines de CI/CD
+> **Curso:** DevOps · **Capítulo:** 04 · **Prerrequisitos:** Pipelines de CI/CD
 > **Código:** [`src/deployment_strategies.rs`](../src/deployment_strategies.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
@@ -233,3 +233,8 @@ por el estudiante.
 - LaunchDarkly: feature flags and progressive delivery.
 - Kubernetes documentation: Deployments and rolling updates.
 - Google SRE Workbook: release engineering and rollback practices.
+
+---
+
+[Anterior: 03. Pipelines de CI/CD](03-pipelines-de-cicd.md) ·
+[Siguiente: 05. Gestión de releases](05-gestion-de-releases.md)

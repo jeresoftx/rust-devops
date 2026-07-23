@@ -1,6 +1,6 @@
 # Pipelines de CI/CD
 
-> **Curso:** DevOps · **Capítulo:** 03 · **Prerequisitos:** Git, Docker
+> **Curso:** DevOps · **Capítulo:** 03 · **Prerrequisitos:** Git, Docker
 > **Código:** [`src/cicd.rs`](../src/cicd.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
@@ -248,3 +248,8 @@ por el estudiante.
 - GitHub Actions documentation: workflow syntax and environments.
 - GitLab CI/CD documentation: pipelines and environments.
 - Google SRE Workbook: release engineering.
+
+---
+
+[Anterior: 02. Kubernetes](02-kubernetes.md) ·
+[Siguiente: 04. Estrategias de despliegue](04-estrategias-de-despliegue.md)

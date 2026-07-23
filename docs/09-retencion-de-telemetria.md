@@ -353,3 +353,8 @@ concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo,
 pruebas, ejemplo ejecutable, diagrama, análisis de complejidad, ejercicios,
 soluciones y benchmark educativo. Todavía no está `reviewed` ni `published`; la
 revisión humana de Joel sigue siendo la frontera editorial.
+
+---
+
+[Anterior: 08. Alertas, SLOs y SLIs](08-alertas-slos-y-slis.md) ·
+[Siguiente: 10. Operación en dominios regulados](10-operacion-en-dominios-regulados.md)

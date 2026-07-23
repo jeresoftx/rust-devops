@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Preparar el milestone `11. Cierre editorial y publicación`: revisar
-consistencia de estados, navegación, manifiesto y contrato de ingestión antes
-de cualquier revisión humana o publicación.
+Continuar el milestone `11. Cierre editorial y publicación`: verificar que
+README, ROADMAP y `course.manifest.json` reflejen exactamente el avance real
+del curso antes de cualquier revisión humana o publicación.
