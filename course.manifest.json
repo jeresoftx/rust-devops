@@ -8,6 +8,12 @@
     "language": "rust",
     "area": "devops"
   },
+  "publication_candidate": {
+    "document": "docs/11-publicacion-candidata.md",
+    "human_review_required": true,
+    "chapters_marked_reviewed": false,
+    "chapters_marked_published": false
+  },
   "chapters": [
     {
       "id": "docker",

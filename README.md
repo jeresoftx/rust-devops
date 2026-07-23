@@ -103,6 +103,8 @@ cargo test --doc
   lineal y revisión editorial.
 - `docs/00-introduccion.md` define la frontera conceptual de DevOps frente a
   Cloud, arquitectura y SRE.
+- `docs/11-publicacion-candidata.md` registra el cierre técnico previo a
+  revisión humana.
 - `ROADMAP.md` registra el avance del curso sin convertirlo en una fecha
   límite.
 - El GitHub Project del curso vive en

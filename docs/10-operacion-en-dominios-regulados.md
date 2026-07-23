@@ -362,4 +362,5 @@ revisión humana de Joel sigue siendo la frontera editorial.
 
 ---
 
-[Anterior: 09. Retención de telemetría](09-retencion-de-telemetria.md)
+[Anterior: 09. Retención de telemetría](09-retencion-de-telemetria.md) ·
+[Siguiente: Publicación candidata](11-publicacion-candidata.md)

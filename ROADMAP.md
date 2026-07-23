@@ -76,6 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Continuar el milestone `11. Cierre editorial y publicación`: ejecutar la suite
-completa, documentar el resultado de publicación candidata y dejar el repo listo
-para revisión humana sin marcar capítulos como `reviewed` ni `published`.
+El siguiente paso ya no es técnico: Joel debe hacer revisión humana del curso,
+decidir correcciones editoriales y, solo después, autorizar cualquier cambio de
+estado hacia `reviewed` o `published`.
