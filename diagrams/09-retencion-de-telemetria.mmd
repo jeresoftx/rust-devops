@@ -1,0 +1,20 @@
+flowchart LR
+    Source["Servicio / sistema"] --> Signal["Logs, métricas y trazas"]
+    Signal --> Classify["Clasificar\npropósito y sensibilidad"]
+    Classify --> Hot["Hot\ninvestigación rápida"]
+    Hot --> Warm["Warm\nconsulta ocasional"]
+    Warm --> Cold["Cold\narchivo o auditoría"]
+    Cold --> Delete["Eliminar\nfin de vida útil"]
+
+    Classify --> Owner["Dueño responsable"]
+    Classify --> Cost["Costo estimado"]
+    Classify --> Review["Revisión periódica"]
+    Classify --> Privacy["Redacción / minimización"]
+
+    Owner --> Decision["Decisión operativa"]
+    Cost --> Decision
+    Review --> Decision
+    Privacy --> Decision
+
+    Decision --> Hot
+    Decision --> Delete

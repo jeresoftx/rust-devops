@@ -138,6 +138,57 @@ sensibilidad y eliminación con criterio.
 - Ejemplos progresivos y pruebas.
 - Benchmarks o estimaciones de costo documentadas.
 
+## Diagrama
+
+El diagrama principal vive en
+[`diagrams/09-retencion-de-telemetria.mmd`](../diagrams/09-retencion-de-telemetria.mmd).
+
+```mermaid
+flowchart LR
+    Source["Servicio / sistema"] --> Signal["Logs, métricas y trazas"]
+    Signal --> Classify["Clasificar\npropósito y sensibilidad"]
+    Classify --> Hot["Hot\ninvestigación rápida"]
+    Hot --> Warm["Warm\nconsulta ocasional"]
+    Warm --> Cold["Cold\narchivo o auditoría"]
+    Cold --> Delete["Eliminar\nfin de vida útil"]
+
+    Classify --> Owner["Dueño responsable"]
+    Classify --> Cost["Costo estimado"]
+    Classify --> Review["Revisión periódica"]
+    Classify --> Privacy["Redacción / minimización"]
+
+    Owner --> Decision["Decisión operativa"]
+    Cost --> Decision
+    Review --> Decision
+    Privacy --> Decision
+
+    Decision --> Hot
+    Decision --> Delete
+```
+
+El flujo empieza cuando el sistema emite señales. Antes de decidir días, el
+equipo clasifica propósito y sensibilidad. Esa clasificación define cuánto vive
+la señal en hot, cuándo pasa a warm, cuándo se archiva en cold y cuándo se
+elimina. Dueño, costo, revisión y privacidad no son columnas administrativas:
+son parte del diseño operativo.
+
+## Cómo leer una política de retención
+
+Una política útil responde estas preguntas:
+
+- qué señal se retiene;
+- para qué se conserva;
+- quién responde por ella;
+- qué sensibilidad tiene;
+- cuántos días vive en hot, warm y cold;
+- cuánto volumen produce por día;
+- cuándo se revisa;
+- qué datos se redactan, agregan o eliminan.
+
+Una política pobre solo dice "guardar logs por 90 días". Una política operable
+explica por qué esos logs existen, qué pregunta responden, cuánto cuestan, qué
+riesgo contienen y cuándo deben dejar de vivir.
+
 ## Implementación
 
 El código vive en
@@ -156,6 +207,26 @@ La implementación no consulta un proveedor real ni calcula facturas exactas.
 Primero modela la decisión: qué señal se guarda, por qué, quién responde por
 ella, cuánto volumen produce y cuándo debe revisarse.
 
+## Ejemplo ejecutable
+
+El ejemplo vive en
+[`examples/telemetry_retention.rs`](../examples/telemetry_retention.rs):
+
+```bash
+cargo run --example telemetry_retention
+```
+
+El ejemplo compara:
+
+- una política de métricas de checkout con propósito de tendencia, dueño,
+  retención hot/warm/cold, volumen estimado y revisión periódica;
+- una política riesgosa de logs sensibles con demasiados días hot y sin
+  redacción de campos sensibles.
+
+La diferencia importante no está en memorizar un número de días. La diferencia
+es si el equipo puede explicar valor, costo, sensibilidad y vida útil de la
+señal.
+
 ## Pruebas
 
 Las pruebas unitarias cubren:
@@ -165,10 +236,33 @@ Las pruebas unitarias cubren:
 - política sin dueño, propósito ni revisión;
 - volumen inválido y datos regulados sin archivo cold.
 
+Los doctests muestran cómo crear una política mínima y cómo evaluar una
+política completa.
+
+## Análisis de complejidad
+
+El modelo educativo evalúa una sola política con costo constante: `O(1)`.
+Calcula días totales, volumen estimado y hallazgos sobre campos ya declarados.
+
+En producción, el costo real vive en otra parte:
+
+- volumen diario por servicio y ambiente;
+- cardinalidad de métricas;
+- tamaño y estructura de logs;
+- porcentaje de trazas muestreadas;
+- compresión y formato de almacenamiento;
+- latencia de recuperación desde cold;
+- frecuencia de consultas durante incidentes;
+- obligaciones de privacidad, auditoría y eliminación.
+
+Por eso el capítulo separa modelo local de plataforma real. La función Rust
+protege el contrato educativo; la operación real exige medir volumen, costo y
+uso en el sistema desplegado.
+
 ## Cierre editorial
 
 Este capítulo queda en estado `implemented`: define intención, problema,
-concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
-pruebas. Todavía no tiene ejemplo ejecutable, diagrama, ejercicios ni benchmark.
-Tampoco está `reviewed` ni `published`; la revisión humana de Joel sigue siendo
-la frontera editorial.
+concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo,
+pruebas, ejemplo ejecutable, diagrama y análisis de complejidad. Todavía no
+tiene ejercicios, soluciones ni benchmark educativo. Tampoco está `reviewed` ni
+`published`; la revisión humana de Joel sigue siendo la frontera editorial.
