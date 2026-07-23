@@ -51,7 +51,7 @@ progresión esperada es:
 | 06 | Observabilidad | benchmarked |
 | 07 | Stack Grafana | benchmarked |
 | 08 | Alertas, SLOs y SLIs | benchmarked |
-| 09 | Retención de telemetría | implemented |
+| 09 | Retención de telemetría | benchmarked |
 | 10 | Operación en dominios regulados | planned |
 
 ## Alineación RFC-0001
@@ -76,5 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Completar el capítulo `09. Retención de telemetría` con diagrama, ejemplo
-ejecutable, ejercicios, soluciones y benchmark educativo.
+Continuar con el milestone `10. Operación en dominios regulados`: definir
+concepto, problema, invariantes y fronteras antes de escribir el modelo Rust
+mínimo.
