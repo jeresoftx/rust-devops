@@ -1,12 +1,12 @@
 # Retención de Telemetría
 
 > **Curso:** DevOps · **Capítulo:** 09 · **Prerrequisitos:** Stack Grafana
-> **Código:** `src/telemetry_retention.rs` · **Video:** pendiente
+> **Código:** [`src/telemetry_retention.rs`](../src/telemetry_retention.rs) · **Video:** pendiente
 > **Lección en el sitio:** pendiente
 
 ## Estado
 
-`draft`
+`implemented`
 
 ## Intención
 
@@ -138,9 +138,37 @@ sensibilidad y eliminación con criterio.
 - Ejemplos progresivos y pruebas.
 - Benchmarks o estimaciones de costo documentadas.
 
+## Implementación
+
+El código vive en
+[`src/telemetry_retention.rs`](../src/telemetry_retention.rs). El módulo
+representa:
+
+- `TelemetrySignalKind`: métrica, log o traza;
+- `DataSensitivity`: datos públicos, internos, sensibles o regulados;
+- `RetentionPurpose`: investigación, tendencia, auditoría o cumplimiento;
+- `RetentionTier`: días hot, warm y cold;
+- `TelemetryRetentionPolicy`: política completa de vida útil;
+- `TelemetryRetentionFinding`: hallazgos de diseño;
+- `evaluate_retention`: evaluación de costo, sensibilidad y gobernanza.
+
+La implementación no consulta un proveedor real ni calcula facturas exactas.
+Primero modela la decisión: qué señal se guarda, por qué, quién responde por
+ella, cuánto volumen produce y cuándo debe revisarse.
+
+## Pruebas
+
+Las pruebas unitarias cubren:
+
+- política de métrica con propósito, dueño, revisión y costo acotado;
+- logs sensibles sin redacción;
+- política sin dueño, propósito ni revisión;
+- volumen inválido y datos regulados sin archivo cold.
+
 ## Cierre editorial
 
-Este capítulo queda en estado `draft`: define intención, problema, concepto,
-alternativas, tradeoffs, invariantes y fronteras. Todavía no tiene modelo Rust,
-ejemplo ejecutable, diagrama, ejercicios ni benchmark. Tampoco está `reviewed`
-ni `published`; la revisión humana de Joel sigue siendo la frontera editorial.
+Este capítulo queda en estado `implemented`: define intención, problema,
+concepto, alternativas, tradeoffs, invariantes, fronteras, modelo Rust mínimo y
+pruebas. Todavía no tiene ejemplo ejecutable, diagrama, ejercicios ni benchmark.
+Tampoco está `reviewed` ni `published`; la revisión humana de Joel sigue siendo
+la frontera editorial.
