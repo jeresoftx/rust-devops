@@ -140,7 +140,7 @@
       "number": 10,
       "title": "Operación en dominios regulados",
       "slug": "operacion-en-dominios-regulados",
-      "status": "planned",
+      "status": "implemented",
       "milestone": "10. Operación en dominios regulados",
       "document": "docs/10-operacion-en-dominios-regulados.md",
       "module": "src/regulated_operations.rs",

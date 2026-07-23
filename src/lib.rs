@@ -10,6 +10,7 @@ pub mod docker;
 pub mod grafana_stack;
 pub mod kubernetes;
 pub mod observability;
+pub mod regulated_operations;
 pub mod release_management;
 pub mod reliability_targets;
 pub mod telemetry_retention;
@@ -106,7 +107,7 @@ const PLANNED_CHAPTERS: [Chapter; 10] = [
     Chapter {
         number: 10,
         title: "Operación en dominios regulados",
-        status: ChapterStatus::Planned,
+        status: ChapterStatus::Implemented,
     },
 ];
 
@@ -130,12 +131,7 @@ mod tests {
         assert_eq!(chapters[6].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[7].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[8].status, ChapterStatus::Benchmarked);
-        assert!(
-            chapters
-                .iter()
-                .skip(9)
-                .all(|chapter| chapter.status == ChapterStatus::Planned)
-        );
+        assert_eq!(chapters[9].status, ChapterStatus::Implemented);
         assert_eq!(chapters[0].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[1].status, ChapterStatus::Benchmarked);
         assert_eq!(chapters[2].status, ChapterStatus::Benchmarked);

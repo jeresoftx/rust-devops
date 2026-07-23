@@ -52,7 +52,7 @@ progresión esperada es:
 | 07 | Stack Grafana | benchmarked |
 | 08 | Alertas, SLOs y SLIs | benchmarked |
 | 09 | Retención de telemetría | benchmarked |
-| 10 | Operación en dominios regulados | planned |
+| 10 | Operación en dominios regulados | implemented |
 
 ## Alineación RFC-0001
 
@@ -76,6 +76,5 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Continuar con el milestone `10. Operación en dominios regulados`: definir
-concepto, problema, invariantes y fronteras antes de escribir el modelo Rust
-mínimo.
+Completar el capítulo `10. Operación en dominios regulados` con diagrama,
+ejemplo ejecutable, ejercicios, soluciones y benchmark educativo.

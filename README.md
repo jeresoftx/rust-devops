@@ -43,7 +43,7 @@ forma disciplinada de cambiar, liberar, observar y reparar.
 | 07 | Stack Grafana | `src/grafana_stack.rs` | benchmarked |
 | 08 | Alertas, SLOs y SLIs | `src/reliability_targets.rs` | benchmarked |
 | 09 | Retención de telemetría | `src/telemetry_retention.rs` | benchmarked |
-| 10 | Operación en dominios regulados | `src/regulated_operations.rs` | planned |
+| 10 | Operación en dominios regulados | `src/regulated_operations.rs` | implemented |
 
 Estados posibles: `planned`, `draft`, `implemented`, `tested`,
 `benchmarked`, `reviewed`, `published`.
