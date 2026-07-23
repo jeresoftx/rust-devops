@@ -1,0 +1,23 @@
+flowchart LR
+    Actor["Actor humano o sistema"] --> Action["Acción operativa"]
+    Action --> Auth["Autorización"]
+    Action --> Env["Ambiente"]
+    Action --> Resource["Recurso"]
+    Action --> Data["Clasificación de datos"]
+
+    Auth --> Event["Evento auditable"]
+    Env --> Event
+    Resource --> Event
+    Data --> Event
+
+    Event --> Correlation["Correlación\ncambio / incidente"]
+    Event --> Evidence["Evidencia"]
+    Event --> Retention["Retención"]
+    Event --> Privacy["Minimización / redacción"]
+    Event --> Review["Revisión posterior"]
+
+    Correlation --> Audit["Auditoría e investigación"]
+    Evidence --> Audit
+    Retention --> Audit
+    Privacy --> Audit
+    Review --> Audit
