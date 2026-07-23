@@ -52,7 +52,7 @@ progresión esperada es:
 | 07 | Stack Grafana | benchmarked |
 | 08 | Alertas, SLOs y SLIs | benchmarked |
 | 09 | Retención de telemetría | benchmarked |
-| 10 | Operación en dominios regulados | implemented |
+| 10 | Operación en dominios regulados | benchmarked |
 
 ## Alineación RFC-0001
 
@@ -76,5 +76,6 @@ progresión esperada es:
 
 ## Siguiente paso natural
 
-Completar el capítulo `10. Operación en dominios regulados` con diagrama,
-ejemplo ejecutable, ejercicios, soluciones y benchmark educativo.
+Preparar el milestone `11. Cierre editorial y publicación`: revisar
+consistencia de estados, navegación, manifiesto y contrato de ingestión antes
+de cualquier revisión humana o publicación.
